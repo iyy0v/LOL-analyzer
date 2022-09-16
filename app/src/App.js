@@ -4,17 +4,31 @@ import AccCard from './components/AccountCard';
 
 function App() {
   return (
-    <div className="App h-full bg-gradient-to-b from-slate-900 to-sky-900  text-gray-100">
+    <div className="App h-screen bg-gradient-to-b from-slate-900 to-sky-900  text-gray-100 overflow-hidden">
       <NavBar />
-      <main className="flex pt-16 divide-x divide-sky-900">
-        <aside className="basis-1/4">
-          <div className="sticky pt-4 flex flex-col items-center top-16 divide-y divide-sky-900 gap-2">
+      <main className=" h-[100vh] flex divide-x divide-sky-900 z-1">
+        <aside className="basis-1/4 pt-16">
+          <div className="sticky h-[92vh] overflow-y-scroll overscroll-contain scrollbar pt-4 flex flex-col items-center top-16 divide-y divide-sky-900">
+            <AccCard />
+            <AccCard />
+            <AccCard />
+            <AccCard />
+            <AccCard />
+            <AccCard />
+            <AccCard />
+            <AccCard />
+            <AccCard />
             <AccCard />
             <AccCard />
             <AccCard />
           </div>
         </aside>
-        <div className="basis-3/4">
+        <div className="basis-3/4 pt-16 overflow-y-scroll scrollbar">
+          <p className="text-9xl">Hello  World</p>
+          <p className="text-9xl">Hello  World</p>
+          <p className="text-9xl">Hello  World</p>
+          <p className="text-9xl">Hello  World</p>
+          <p className="text-9xl">Hello  World</p>
           <p className="text-9xl">Hello  World</p>
           <p className="text-9xl">Hello  World</p>
           <p className="text-9xl">Hello  World</p>

@@ -4,4 +4,24 @@
 
 html {
     font-family: 'Roboto', sans-serif;
+    height: 100vh;
+    
+}
+body {
+    height: 100vh;
+}
+.scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 20px;
+  }
+
+.scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: white;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    background: #0c4a6e;
+    border-radius: 100vh;
+    border: 3px solid #f6f7ed;
 }
