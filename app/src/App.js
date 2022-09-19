@@ -7,7 +7,6 @@ function App() {
   const [accInfo, setAccInfo] = useState('');
   const addAccount = (info) => {
     setAccInfo(info);
-    console.log(info);
   }
 
   return (
@@ -16,18 +15,8 @@ function App() {
       <main className=" h-[100vh] flex divide-x divide-sky-900 z-1">
         <aside className="basis-1/4 pt-16">
           <div className="sticky h-[92vh] overflow-y-scroll overscroll-contain scrollbar pt-4 flex flex-col items-center top-16 divide-y divide-sky-900">
-            <AccCard />
-            <AccCard />
-            <AccCard />
-            <AccCard />
-            <AccCard />
-            <AccCard />
-            <AccCard />
-            <AccCard />
-            <AccCard />
-            <AccCard />
-            <AccCard />
-            <AccCard />
+           { accInfo !== '' ? <AccCard accInfo={accInfo} /> : "No accounts" } 
+            
           </div>
         </aside>
         <div className="basis-3/4 pt-16 overflow-y-scroll scrollbar">
