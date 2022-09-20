@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-export default function NavBar({addAcc}) {
+export default function NavBar({addAcc,setPatch}) {
     
     const API_KEY = "RGAPI-e2792f24-186c-4da9-a6cb-ef801611bc3c";
-    let regions = [<option value="euw1">EUW</option>,<option value="eun1">EUNE</option>,<option value="na1">NA</option>,<option value="kr">KR</option>,<option value="oc1">OCE</option>,<option value="jp1">JP</option>,<option value="br1">BR</option>,<option value="la1">LAN</option>,<option value="la2">LAS</option>,<option value="ru">RU</option>,<option value="tr1">TR</option>]
+    let regions = [<option value="euw1">EUW</option>,<option value="eun1">EUNE</option>,<option value="na1">NA</option>,<option value="kr">KR</option>,<option value="oc1">OCE</option>,<option value="jp1">JP</option>,<option value="br1">BR</option>,<option value="la1">LAN</option>,<option value="la2">LAS</option>,<option value="ru">RU</option>,<option value="tr1">TR</option>];
+
 
     function handleGet(event) {
         const summoner = event.target.value;
@@ -14,14 +15,29 @@ export default function NavBar({addAcc}) {
               url: "https://" + region + ".api.riotgames.com/lol/summoner/v4/summoners/by-name/" + summoner + "?api_key=" + API_KEY,
               method: "GET"
             })
-
-              .then((res) => {
-                addAcc(res);
+            .then((res1) => {
+                axios({
+                url: "https://" + region + ".api.riotgames.com/lol/league/v4/entries/by-summoner/" + res1.data.id + "?api_key=" + API_KEY,
+                method: "GET"
+                })
+                .then((res2) => {
+                    addAcc(res1,res2);
+                })
+                .catch((err) => { 
+                    console.log(err)
+                });
             })
           
-              .catch((err) => { 
+            .catch((err) => { 
                 console.log(err)
             });
+
+            fetch('https://ddragon.leagueoflegends.com/api/versions.json')
+            .then(res => res.json()).then(result => setPatch(result[0]))
+            .catch(console.log);
+
+            
+            event.target.value = "";
         }
     };
     
