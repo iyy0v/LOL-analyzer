@@ -13,11 +13,14 @@ function App() {
   const [accounts, setAccounts] = useState([]);
   const addAccount = (info1,info2) => {
     const temp = accounts;
-    temp.push(<AccCard accInfo={info1} rankInfo={info2} patch={patch} />);
+    temp.push(<AccCard key={info1.data.id} accInfo={info1} rankInfo={info2} patch={patch} loadAccount={loadAccount}/>);
     setAccounts(temp);
     setRerender(!rerender);
   }
 
+  const loadAccount = () => {
+    console.log("account load");
+  } 
 
   useEffect(() => {  },[rerender]);
 
