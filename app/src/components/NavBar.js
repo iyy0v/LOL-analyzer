@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default function NavBar({addAcc,setPatch}) {
+export default function NavBar({addAcc}) {
     
     const API_KEY = "RGAPI-e2792f24-186c-4da9-a6cb-ef801611bc3c";
     let regions = [<option value="euw1">EUW</option>,<option value="eun1">EUNE</option>,<option value="na1">NA</option>,<option value="kr">KR</option>,<option value="oc1">OCE</option>,<option value="jp1">JP</option>,<option value="br1">BR</option>,<option value="la1">LAN</option>,<option value="la2">LAS</option>,<option value="ru">RU</option>,<option value="tr1">TR</option>];
@@ -32,9 +32,6 @@ export default function NavBar({addAcc,setPatch}) {
                 console.log(err)
             });
 
-            fetch('https://ddragon.leagueoflegends.com/api/versions.json')
-            .then(res => res.json()).then(result => setPatch(result[0]))
-            .catch(console.log);
 
             
             event.target.value = "";

@@ -4,6 +4,7 @@ export default function AccCard({accInfo,rankInfo,patch}) {
     const name = accInfo.data.name;
     const level = accInfo.data.summonerLevel;
     const icon = accInfo.data.profileIconId;
+    const iconURL = "https://ddragon.leagueoflegends.com/cdn/" + patch + "/img/profileicon/" + icon + ".png";
     const ranked = rankInfo.data;
     let rankedData;
     let type;
@@ -25,23 +26,11 @@ export default function AccCard({accInfo,rankInfo,patch}) {
         rank = rankedData.rank;
         lp = rankedData.leaguePoints;
     }
-    const iconURL = "https://ddragon.leagueoflegends.com/cdn/" + patch + "/img/profileicon/" + icon + ".png";
-    console.log(iconURL);
-    axios({
-        url: iconURL,
-        method: "GET"
-    })
-    .then((res) => {
-        console.log(res);
-    })
-    .catch((err) => { 
-       
-    });
 
     return(
         <div className="w-11/12 h-18 p-1 py-3 flex flex-row gap-3 z-1">
             <div className="col-span-1 min-w-16 ">
-                <img src={require("../img/profile.jpg")} alt="profile icon" className="w-16 rounded-2xl"/>
+                <img src={iconURL} alt="profile icon" className="w-16 rounded-2xl"/>
             </div>
             <div className="col-span-3 w-full">
                 <p className="text-2xl">{name}</p>
