@@ -1,21 +1,30 @@
 import './style/index.css';
 import NavBar from './components/NavBar';
 import AccCard from './components/AccountCard';
+import Dashboard from './components/Dashboard';
 import { useEffect, useState } from 'react';
 
 function App() {
   const [patch, setPatch] = useState("");
-  const [currentAcc, setCurrentAcc] = useState();
+  const [currentAcc, setCurrentAcc] = useState({});
+  const [rerender, setRerender] = useState(false);
+  const [accounts, setAccounts] = useState([]);
+
   fetch('https://ddragon.leagueoflegends.com/api/versions.json')
   .then(res => res.json()).then(result => setPatch(result[0]))
   .catch(console.log);
 
-  const [rerender, setRerender] = useState(false);
-  const [accounts, setAccounts] = useState([]);
   const addAccount = (info1,info2,region) => {
     const temp = accounts;
-    temp.push(<AccCard key={info1.data.id} accInfo={info1} rankInfo={info2} region={region} patch={patch} setCurAcc={setCurrentAcc}/>);
+    temp.push(<AccCard key={info1.data.id} accInfo={info1} rankInfo={info2} region={region} patch={patch} setCurAcc={setCurrentAcc} rerender={rerender} setRerender={setRerender} loadAcc={loadAccount}/>);
     setAccounts(temp);
+    setRerender(!rerender);
+  }
+  const loadAccount = (accInfo) => {
+    console.log(currentAcc);
+    setCurrentAcc(accInfo.data);
+    console.log(currentAcc);
+    //getMatches(region,accInfo.data.puuid,0,10);
     setRerender(!rerender);
   }
 
@@ -32,19 +41,8 @@ function App() {
           </div>
         </aside>
         <div className="basis-3/4 pt-16 overflow-y-auto scrollbar">
-          <p className="text-9xl">Hello  World</p>
-          <p className="text-9xl">Hello  World</p>
-          <p className="text-9xl">Hello  World</p>
-          <p className="text-9xl">Hello  World</p>
-          <p className="text-9xl">Hello  World</p>
-          <p className="text-9xl">Hello  World</p>
-          <p className="text-9xl">Hello  World</p>
-          <p className="text-9xl">Hello  World</p>
-          <p className="text-9xl">Hello  World</p>
-          <p className="text-9xl">Hello  World</p>
-          <p className="text-9xl">Hello  World</p>
+          <Dashboard />
         </div>
-        
       </main>
     </div>
   );

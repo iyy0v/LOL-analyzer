@@ -1,7 +1,8 @@
-import axios from "axios";
+import { getMatches } from "../scripts";
 
-export default function AccCard({accInfo,rankInfo,region,patch,setCurAcc}) {
-    const API_KEY = process.env.REACT_APP_API_KEY;
+export default function AccCard({accInfo,rankInfo,region,patch,loadAcc}) {
+    console.log(accInfo);
+    // Init account infos
     const name = accInfo.data.name;
     const level = accInfo.data.summonerLevel;
     const icon = accInfo.data.profileIconId;
@@ -27,53 +28,16 @@ export default function AccCard({accInfo,rankInfo,region,patch,setCurAcc}) {
         rank = rankedData.rank;
         lp = rankedData.leaguePoints;
     }
-
-    const loadAccount = () => {
-        switch(region) {
-            case "euw1":
-            case "eun1":
-            case "ru":
-            case "tr1":
-                region = "europe";
-                break;
-            case "na1":
-            case "la1":
-            case "la2":
-            case "br1":
-                region = "americas";
-                break;
-            case "kr":
-            case "jp1":
-            case "oc1":
-                region = "asia";
-                break;
-            default:
-                region = "sea";
-                break;
-        }
-        axios({
-            url: "https://" + region + ".api.riotgames.com/lol/match/v5/matches/by-puuid/" + accInfo.data.puuid + "/ids?api_key=" + API_KEY,
-            method: "GET"
-            })
-            .then((matches) => {
-                console.log(matches)
-                for(let i in matches.data) {
-                    axios({
-                        url: "https://" + region + ".api.riotgames.com/lol/match/v5/matches/" + matches.data[i] + "?api_key=" + API_KEY,
-                        method: "GET"
-                    })
-                    .then((matches) => {
-                        console.log(matches)
-                    })
-                    .catch((err) => {console.log(err)});
-                }
-            })
-            .catch((err) => {console.log(err)});
+    //---------------------------------------------
+    const update = () => {
+        loadAcc(accInfo);
     }
     
+    
 
+    // Component 
     return(
-        <div onClick={loadAccount} className="w-11/12 h-18 p-1 py-3 flex flex-row gap-3 z-1 cursor-pointer hover:ring-2 hover:rounded ">
+        <div onClick={update} className="w-11/12 h-18 p-1 py-3 flex flex-row gap-3 z-1 cursor-pointer hover:ring-2 hover:rounded ">
             <div className="col-span-1 min-w-16 ">
                 <img src={iconURL} alt="profile icon" className="w-16 rounded-2xl"/>
             </div>

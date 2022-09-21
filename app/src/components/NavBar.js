@@ -2,7 +2,6 @@ import axios from 'axios';
 
 export default function NavBar({addAcc}) {
     const API_KEY = process.env.REACT_APP_API_KEY;
-
     let regions = [<option key="euw" value="euw1">EUW</option>,<option key="eun" value="eun1">EUNE</option>,<option key="na" value="na1">NA</option>,<option key="kr" value="kr">KR</option>,<option key="oce" value="oc1">OCE</option>,<option key="jp" value="jp1">JP</option>,<option key="br" value="br1">BR</option>,<option key="lan" value="la1">LAN</option>,<option key="las" value="la2">LAS</option>,<option key="ru" value="ru">RU</option>,<option key="tr" value="tr1">TR</option>];
 
 
@@ -22,17 +21,10 @@ export default function NavBar({addAcc}) {
                 .then((res2) => {
                     addAcc(res1,res2,region);
                 })
-                .catch((err) => { 
-                    console.log(err)
-                });
+                .catch((err) => {console.log(err)});
             })
-          
-            .catch((err) => { 
-                console.log(err)
-            });
+            .catch((err) => {console.log(err)});
 
-
-            
             event.target.value = "";
         }
     };
