@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 export default function NavBar({addAcc}) {
-    
-    const API_KEY = "RGAPI-e2792f24-186c-4da9-a6cb-ef801611bc3c";
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
     let regions = [<option key="euw" value="euw1">EUW</option>,<option key="eun" value="eun1">EUNE</option>,<option key="na" value="na1">NA</option>,<option key="kr" value="kr">KR</option>,<option key="oce" value="oc1">OCE</option>,<option key="jp" value="jp1">JP</option>,<option key="br" value="br1">BR</option>,<option key="lan" value="la1">LAN</option>,<option key="las" value="la2">LAS</option>,<option key="ru" value="ru">RU</option>,<option key="tr" value="tr1">TR</option>];
 
 
@@ -11,7 +11,6 @@ export default function NavBar({addAcc}) {
         const region = document.getElementById("region").value;
         if(event.key === 'Enter') {
             axios({
-              // Endpoint to send files
               url: "https://" + region + ".api.riotgames.com/lol/summoner/v4/summoners/by-name/" + summoner + "?api_key=" + API_KEY,
               method: "GET"
             })
@@ -21,7 +20,7 @@ export default function NavBar({addAcc}) {
                 method: "GET"
                 })
                 .then((res2) => {
-                    addAcc(res1,res2);
+                    addAcc(res1,res2,region);
                 })
                 .catch((err) => { 
                     console.log(err)

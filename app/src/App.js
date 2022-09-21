@@ -5,22 +5,20 @@ import { useEffect, useState } from 'react';
 
 function App() {
   const [patch, setPatch] = useState("");
+  const [currentAcc, setCurrentAcc] = useState();
   fetch('https://ddragon.leagueoflegends.com/api/versions.json')
   .then(res => res.json()).then(result => setPatch(result[0]))
   .catch(console.log);
 
   const [rerender, setRerender] = useState(false);
   const [accounts, setAccounts] = useState([]);
-  const addAccount = (info1,info2) => {
+  const addAccount = (info1,info2,region) => {
     const temp = accounts;
-    temp.push(<AccCard key={info1.data.id} accInfo={info1} rankInfo={info2} patch={patch} loadAccount={loadAccount}/>);
+    temp.push(<AccCard key={info1.data.id} accInfo={info1} rankInfo={info2} region={region} patch={patch} setCurAcc={setCurrentAcc}/>);
     setAccounts(temp);
     setRerender(!rerender);
   }
 
-  const loadAccount = () => {
-    console.log("account load");
-  } 
 
   useEffect(() => {  },[rerender]);
 
