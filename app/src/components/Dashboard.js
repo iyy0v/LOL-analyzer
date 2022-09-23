@@ -1,9 +1,18 @@
+import { useEffect } from "react"
 
-export default function Dashboard() {
+export default function Dashboard(account) {
+    const info = account.account;
 
+
+
+    useEffect(() => {  },[account]);
+    
     return(
         <div>
-            <p>Hello World !</p>
+            {info === undefined ? <p>EMPTY</p> : 
+            <p>{info.name}</p>
+            }
+            
         </div>
     )
 }
