@@ -19,7 +19,6 @@ function App() {
     temp.push(<AccCard key={info1.data.id} accInfo={info1} rankInfo={info2} region={region} patch={patch} loadAcc={loadAccount}/>);
     setAccounts(temp);
     setRerender(!rerender);
-    console.log(rerender);
   }
 
   const loadAccount = (accInfo) => {
@@ -38,12 +37,11 @@ function App() {
       <main className=" h-[100vh] flex divide-x divide-sky-900 z-1">
         <aside className="basis-1/4 pt-16">
           <div className="sticky h-[92vh] overflow-y-auto overscroll-contain scrollbar pt-4 flex flex-col items-center top-16 divide-y divide-sky-900">
-           { accounts } 
+           { accounts.length === 0 ? <p className="text-xl text-slate-600 pt-4">No accounts added.</p> : accounts } 
           </div>
         </aside>
         <div className="basis-3/4 pt-16 overflow-y-auto scrollbar">
           <Dashboard account={currentAcc.data}/>
-          
         </div>
       </main>
     </div>
