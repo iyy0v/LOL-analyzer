@@ -16,7 +16,7 @@ export function getRank(id,region) {
         url: "https://" + region + ".api.riotgames.com/lol/league/v4/entries/by-summoner/" + id + "?api_key=" + API_KEY,
         method: "GET"
     })
-    .then((res) => {return res})
+    .then((res) => {console.log(res); return res})
     .catch((err) => {console.log(err)});
 }
 

@@ -9,6 +9,7 @@ function App() {
   const [currentAcc, setCurrentAcc] = useState({});
   const [rerender, setRerender] = useState(false);
   const [accounts, setAccounts] = useState([]);
+  const [region, setRegion] = useState('');
 
   fetch('https://ddragon.leagueoflegends.com/api/versions.json')
   .then(res => res.json()).then(result => setPatch(result[0]))
@@ -21,9 +22,11 @@ function App() {
     setRerender(!rerender);
   }
 
-  const loadAccount = (accInfo) => {
+  const loadAccount = (accInfo,region) => {
     const temp = accInfo;
     setCurrentAcc(temp);
+    const temp2 = region;
+    setRegion(temp2);
     //getMatches(region,accInfo.data.puuid,0,10);
     setRerender(current => !current);
   }
@@ -41,7 +44,7 @@ function App() {
           </div>
         </aside>
         <div className="basis-3/4 pt-16 overflow-y-auto scrollbar">
-          <Dashboard account={currentAcc.data}/>
+          <Dashboard props={{currentAcc ,region}}/>
         </div>
       </main>
     </div>

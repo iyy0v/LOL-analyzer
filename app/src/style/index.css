@@ -25,3 +25,13 @@ body {
     border-radius: 100vh;
     border: 3px solid #f6f7ed;
 }
+
+.icon {
+    display: inline-block;
+    mask: url(https://cdn.jsdelivr.net/npm/simple-icons@3.13.0/icons/github.svg);
+    mask-size: cover;
+    background: white;
+    width: 40px;
+    height: 40px;
+    margin-top: 5px;
+}

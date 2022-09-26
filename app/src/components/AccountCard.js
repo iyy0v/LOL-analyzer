@@ -15,7 +15,7 @@ export default function AccCard({accInfo,rankInfo,region,patch,loadAcc}) {
     for (let i in ranked) {
         if (ranked[i].queueType==="RANKED_SOLO_5x5") { 
             rankedData = ranked[i]; 
-            type = "Solo/Duo";
+            type = "Solo";
             break; }
         else if (ranked[i].queueType==="RANKED_FLEX_SR") { 
             rankedData = ranked[i]; 
@@ -30,7 +30,7 @@ export default function AccCard({accInfo,rankInfo,region,patch,loadAcc}) {
     //---------------------------------------------
 
     const loadAccount = () => {
-        loadAcc(accInfo);
+        loadAcc(accInfo,region);
     }    
     
 
