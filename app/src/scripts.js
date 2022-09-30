@@ -62,3 +62,15 @@ export function getMatches(region,puuid,start,count) {
         })
         .catch((err) => {console.log(err)});
 }
+
+export function filterRank(rank) {
+    rank = rank.data;
+    const res = {};
+    res['solo'] = undefined;
+    res['flex'] = undefined;
+    for(let i in rank) {
+        if(rank[i].queueType === 'RANKED_SOLO_5x5') res['solo'] = rank[i];
+        if(rank[i].queueType === 'RANKED_FLEX_SR') res['flex'] = rank[i];
+    }
+    return res;
+}
