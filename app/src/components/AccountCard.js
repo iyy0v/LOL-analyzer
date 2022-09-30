@@ -12,6 +12,7 @@ export default function AccCard({accInfo,rankInfo,region,patch,loadAcc}) {
     let tier;
     let rank;
     let lp;
+    console.log(ranked);
     for (let i in ranked) {
         if (ranked[i].queueType==="RANKED_SOLO_5x5") { 
             rankedData = ranked[i]; 
@@ -21,6 +22,7 @@ export default function AccCard({accInfo,rankInfo,region,patch,loadAcc}) {
             rankedData = ranked[i]; 
             type = "Flex";
         }
+        
     }
     if(rankedData) {
         tier = rankedData.tier;

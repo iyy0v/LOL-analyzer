@@ -74,3 +74,15 @@ export function filterRank(rank) {
     }
     return res;
 }
+
+export function joinChampions(res1,champs) {
+    res1 = res1.data;
+    champs = champs.data;
+    for(let i in res1) {
+        for(let j in champs) {
+            if(res1[i].championId == champs[j].key) { res1[i].champion = champs[j] }
+        }
+    }
+    return res1;
+}
+
