@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { filterRank,joinChampions } from "../scripts";
+import { filterRank,joinChampions,numberWithSpaces,toDateTime } from "../scripts";
 
 export default function Dashboard(props) { 
     const [patch, setPatch] = useState("");
@@ -73,8 +73,20 @@ export default function Dashboard(props) {
                         </div>
                     </div>
                     <div id="accountStats">
-                        <p>{mastery !== undefined ? mastery[0].champion.name : "None" }</p>
-                        {mastery !== undefined ? <img src={"http://ddragon.leagueoflegends.com/cdn/12.18.1/img/champion/" + mastery[0].champion.name + ".png"} /> : "" }
+                        <div id="mainChamps" className="flex flex-row my-2">
+                            <span id="main1" className="flex flex-row w-[400px] py-2 my-2 border-2 border-red-600">
+                                {mastery !== undefined ? <img src={"http://ddragon.leagueoflegends.com/cdn/12.18.1/img/champion/" + mastery[0].champion.name + ".png"} alt={mastery[0].champion.name + " image"} className="w-[80px] h-[80px] rounded-xl mx-2"/> : "" }
+                                <span>
+                                    <h3 className="text-xl">{mastery !== undefined ? mastery[0].champion.name : "None" }</h3>
+                                    
+                                    {mastery !== undefined ? <img src={"https://github.com/RiotAPI/Riot-Games-API-Developer-Assets/blob/master/champion-mastery-icons/mastery-" + mastery[0].championLevel + ".png?raw=true"} alt="mastery icon" className="w-[40px] inline" /> : "None" }
+                                    <p className="inline">{mastery !== undefined ? numberWithSpaces(mastery[0].championPoints) : "None" }</p>
+                                </span>
+                                <p className="text-sm text-gray-400">{mastery !== undefined ? "Last time played : " + toDateTime(mastery[0].lastPlayTime) : "None" }</p>
+                            </span>
+                            
+                        </div>
+                        
                     </div>
                 </div>
             }

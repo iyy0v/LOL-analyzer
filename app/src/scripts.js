@@ -1,5 +1,16 @@
 import axios from "axios";
 
+export function numberWithSpaces(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+}
+
+export function toDateTime(input) {
+    console.log(input);
+    var d = new Date(input).toLocaleString("en-GB").split(',')[0];
+    return d;
+
+}
+
 export function getAccount(name,region) {
     const API_KEY = process.env.REACT_APP_API_KEY;
     axios({
