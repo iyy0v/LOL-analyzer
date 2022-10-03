@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { filterRank,joinChampions,numberWithSpaces,toDateTime } from "../scripts";
+import { filterRank,joinChampions,numberWithSpaces,toDateTime,getRegionName } from "../scripts";
 
 export default function Dashboard(props) { 
     const [patch, setPatch] = useState("");
@@ -14,6 +14,7 @@ export default function Dashboard(props) {
     
     const account = props.props.currentAcc;
     const region = props.props.region;
+    const regionName = getRegionName(region);
     const info = account.data;
 
     
@@ -47,7 +48,7 @@ export default function Dashboard(props) {
                     setMains([]);
                     for(let i=0; i<n; i++) {  
                         temp.push(
-                            <span id="main1" className="flex flex-row w-[400px] min-w-max p-2 m-2 rounded shadow snap-start">
+                            <span id="main1" key={mastery[i].champion.name} className="flex flex-row w-[400px] min-w-max p-2 m-2 rounded shadow snap-start">
                                 <img src={"http://ddragon.leagueoflegends.com/cdn/12.18.1/img/champion/" + mastery[i].champion.id + ".png"} alt={mastery[i].champion.name + " image"} className="w-[80px] h-[80px] rounded-xl"/>
                                 <span className="mx-2">
                                     <h3 className="text-2xl text-yellow-600">{mastery[i].champion.name}</h3>
@@ -91,7 +92,7 @@ export default function Dashboard(props) {
                                 <img src={"https://ddragon.leagueoflegends.com/cdn/" + patch + "/img/profileicon/" + info.profileIconId + ".png"} alt="profile icon" className="w-28 rounded-2xl"/>
                                 <p className="w-min px-1 relative top-[-13px] mx-auto rounded bg-slate-900 ">{info.summonerLevel}</p>
                             </div>
-                            <p className="w-fit px-4 py-2 text-5xl">{info.name}</p>
+                            <p className="w-fit px-4 py-2 text-5xl">{info.name} <sup className="text-sm align-super">({regionName})</sup></p>
                         </div>
                         <div id="leftInfo" className="flex flex-col justify-around">
                             <p className="py-2 text-gray-400">Ranked Solo : <strong>{rank !== undefined ? rank.solo !== undefined ? rank.solo.tier + " " + rank.solo.rank + " - " + rank.solo.leaguePoints + " LP" : "Unranked" : "Unranked"}</strong></p>

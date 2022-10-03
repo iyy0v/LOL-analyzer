@@ -15,9 +15,9 @@ function App() {
   .then(res => res.json()).then(result => setPatch(result[0]))
   .catch(console.log);
 
-  const addAccount = (info1,info2,region) => {
+  const addAccount = (info1,info2,region,regionName) => {
     const temp = accounts;
-    temp.push(<AccCard key={info1.data.id} accInfo={info1} rankInfo={info2} region={region} patch={patch} loadAcc={loadAccount}/>);
+    temp.push(<AccCard key={info1.data.id} accInfo={info1} rankInfo={info2} region={region} regionName={regionName} patch={patch} loadAcc={loadAccount}/>);
     setAccounts(temp);
     setRerender(!rerender);
   }

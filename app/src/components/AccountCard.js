@@ -1,6 +1,6 @@
 import { getMatches } from "../scripts";
 
-export default function AccCard({accInfo,rankInfo,region,patch,loadAcc}) {
+export default function AccCard({accInfo,rankInfo,region,regionName,patch,loadAcc}) {
     // Init account infos
     const name = accInfo.data.name;
     const level = accInfo.data.summonerLevel;
@@ -42,7 +42,11 @@ export default function AccCard({accInfo,rankInfo,region,patch,loadAcc}) {
                 <img src={iconURL} alt="profile icon" className="w-16 rounded-2xl"/>
             </div>
             <div className="col-span-3 w-full">
-                <p className="text-2xl">{name}</p>
+                <div className="flex flex-row justify-between gap-2">
+                    <p className="text-2xl">{name}</p>
+                    <p className="text-sm">{regionName}</p>
+                </div>
+                
                 <div className="flex flex-row justify-between gap-2 text-gray-400">
                     <p>lvl {level}</p>
                     <p>{tier} {rankedData ? <>{rank} - {lp}LP <small>({type})</small></> : "Unranked"}</p>

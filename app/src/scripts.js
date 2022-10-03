@@ -10,6 +10,45 @@ export function toDateTime(input) {
 
 }
 
+export function getRegionName(region) {
+    switch(region) {
+        case "euw1":
+            region = "EUW";
+            break;
+        case "eun1":
+            region = "EUNE";
+            break;
+        case "ru":
+            region = "RU";
+            break;
+        case "tr1":
+            region = "TR";
+            break;
+        case "na1":
+            region = "NA";
+            break;
+        case "la1":
+            region = "LAN";
+            break;
+        case "la2":
+            region = "LAS";
+            break;
+        case "br1":
+            region = "BR";
+            break;
+        case "kr":
+            region = "KR";
+            break;
+        case "jp1":
+            region = "JP";
+            break;
+        default:
+            region = "SEA";
+            break;
+    }
+    return region;
+}
+
 export function getAccount(name,region) {
     const API_KEY = process.env.REACT_APP_API_KEY;
     axios({
