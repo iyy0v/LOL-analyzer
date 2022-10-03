@@ -5,7 +5,6 @@ export function numberWithSpaces(x) {
 }
 
 export function toDateTime(input) {
-    console.log(input);
     var d = new Date(input).toLocaleString("en-GB").split(',')[0];
     return d;
 

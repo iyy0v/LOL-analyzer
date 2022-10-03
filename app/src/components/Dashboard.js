@@ -6,8 +6,9 @@ export default function Dashboard(props) {
     const [patch, setPatch] = useState("");
     const [rank,setRank] = useState();
     const [mastery,setMastery] = useState();
+    const [mains,setMains] = useState([]);
 
-    fetch('https://ddragon.leagueoflegends.com/api/versions.json')
+    fetch('https://ddragon.leagueoflegends.com/api/versions.json') // Get current patch version
     .then(res => res.json()).then(result => setPatch(result[0]))
     .catch(console.log);
     
@@ -23,6 +24,7 @@ export default function Dashboard(props) {
             method: "GET"
         })
         .then((res) => {
+            //Process Ranks
             let temp = filterRank(res);
             setRank(temp);
             axios({
@@ -35,6 +37,30 @@ export default function Dashboard(props) {
                     const mastery = joinChampions(res1,champs);
                     setMastery(mastery);
 
+                    // Process main champions
+                    let n;
+                    if(mastery.length > 10) n = 10;
+                    else n = mastery.length;
+
+                    let temp;
+                    temp = [];
+                    setMains([]);
+                    for(let i=0; i<n; i++) {  
+                        temp.push(
+                            <span id="main1" className="flex flex-row w-[400px] min-w-max p-2 m-2 rounded shadow snap-start">
+                                <img src={"http://ddragon.leagueoflegends.com/cdn/12.18.1/img/champion/" + mastery[i].champion.id + ".png"} alt={mastery[i].champion.name + " image"} className="w-[80px] h-[80px] rounded-xl"/>
+                                <span className="mx-2">
+                                    <h3 className="text-2xl text-yellow-600">{mastery[i].champion.name}</h3>
+                                    <img src={"https://github.com/RiotAPI/Riot-Games-API-Developer-Assets/blob/master/champion-mastery-icons/mastery-" + mastery[i].championLevel + ".png?raw=true"} alt="mastery icon" className="w-[40px] inline" />
+                                    <p className="inline text-xl mt-[5px] ml-[5px]">{numberWithSpaces(mastery[i].championPoints)}</p>
+                                </span>
+                                <span className="flex flex-col justify-end">
+                                    <p className="text-sm text-gray-400">{"Last time played : " + toDateTime(mastery[i].lastPlayTime)}</p>
+                                </span>
+                            </span>
+                        );
+                    }
+                    setMains(temp);
                     console.log(mastery);
                 })
                 .catch(console.log);
@@ -57,7 +83,7 @@ export default function Dashboard(props) {
                 <div id="dashboard" className="pt-4">
                     <p className="text-xl text-slate-600 pt-4 text-center">No account selected.</p>
                 </div>
-            :
+            : //Account selected
                 <div id="dashboard" className="px-[10%] py-16 divide-y divide-slate-600">
                     <div id="accountInfos" className="flex flex-row justify-between w-full">
                         <div id="rightInfo"  className="flex flex-row">
@@ -73,18 +99,8 @@ export default function Dashboard(props) {
                         </div>
                     </div>
                     <div id="accountStats">
-                        <div id="mainChamps" className="flex flex-row my-2">
-                            <span id="main1" className="flex flex-row w-[400px] py-2 my-2 border-2 border-red-600">
-                                {mastery !== undefined ? <img src={"http://ddragon.leagueoflegends.com/cdn/12.18.1/img/champion/" + mastery[0].champion.name + ".png"} alt={mastery[0].champion.name + " image"} className="w-[80px] h-[80px] rounded-xl mx-2"/> : "" }
-                                <span>
-                                    <h3 className="text-xl">{mastery !== undefined ? mastery[0].champion.name : "None" }</h3>
-                                    
-                                    {mastery !== undefined ? <img src={"https://github.com/RiotAPI/Riot-Games-API-Developer-Assets/blob/master/champion-mastery-icons/mastery-" + mastery[0].championLevel + ".png?raw=true"} alt="mastery icon" className="w-[40px] inline" /> : "None" }
-                                    <p className="inline">{mastery !== undefined ? numberWithSpaces(mastery[0].championPoints) : "None" }</p>
-                                </span>
-                                <p className="text-sm text-gray-400">{mastery !== undefined ? "Last time played : " + toDateTime(mastery[0].lastPlayTime) : "None" }</p>
-                            </span>
-                            
+                        <div id="mainChamps" className="flex flex-row my-2 overflow-x-auto scrollbar snap-x snap-normal">
+                            {mains.length > 0 ? mains : <p className="text-xl text-slate-600 pt-4 text-center">None</p>} 
                         </div>
                         
                     </div>

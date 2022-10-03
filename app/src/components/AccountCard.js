@@ -12,7 +12,7 @@ export default function AccCard({accInfo,rankInfo,region,patch,loadAcc}) {
     let tier;
     let rank;
     let lp;
-    console.log(ranked);
+    
     for (let i in ranked) {
         if (ranked[i].queueType==="RANKED_SOLO_5x5") { 
             rankedData = ranked[i]; 
@@ -29,7 +29,6 @@ export default function AccCard({accInfo,rankInfo,region,patch,loadAcc}) {
         rank = rankedData.rank;
         lp = rankedData.leaguePoints;
     }
-    //---------------------------------------------
 
     const loadAccount = () => {
         loadAcc(accInfo,region);
