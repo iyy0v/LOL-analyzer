@@ -48,7 +48,7 @@ export default function Dashboard(props) {
                     setMains([]);
                     for(let i=0; i<n; i++) {  
                         temp.push(
-                            <span id="main1" key={mastery[i].champion.name} className="flex flex-row w-[400px] min-w-max p-2 m-2 rounded shadow snap-start">
+                            <span id="main1" key={mastery[i].champion.name} className="flex flex-row w-[400px] min-w-max p-2 m-2 rounded shadow-md snap-start backdrop-brightness-90">
                                 <img src={"http://ddragon.leagueoflegends.com/cdn/12.18.1/img/champion/" + mastery[i].champion.id + ".png"} alt={mastery[i].champion.name + " image"} className="w-[80px] h-[80px] rounded-xl"/>
                                 <span className="mx-2">
                                     <h3 className="text-2xl text-yellow-600">{mastery[i].champion.name}</h3>
@@ -100,7 +100,7 @@ export default function Dashboard(props) {
                         </div>
                     </div>
                     <div id="accountStats">
-                        <div id="mainChamps" className="flex flex-row my-2 overflow-x-auto scrollbar snap-x snap-normal">
+                        <div id="mainChamps" className="flex flex-row my-2 overflow-x-auto scrollbar snap-x snap-normal ">
                             {mains.length > 0 ? mains : <p className="text-xl text-slate-600 pt-4 text-center">None</p>} 
                         </div>
                         
