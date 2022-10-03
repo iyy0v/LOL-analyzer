@@ -12,7 +12,7 @@ body {
 }
 .scrollbar::-webkit-scrollbar {
     width: 8px;
-    height: 8px;
+    height: 9px;
   }
 
 .scrollbar::-webkit-scrollbar-track {
@@ -23,7 +23,7 @@ body {
 .scrollbar::-webkit-scrollbar-thumb {
     background: #0c4a6e;
     border-radius: 100vh;
-    border: 3px solid darkgrey;
+    border: 1px solid darkgrey;
 }
 
 .icon {
@@ -34,4 +34,15 @@ body {
     width: 40px;
     height: 40px;
     margin-top: 5px;
+}
+
+.material-symbols-outlined {
+    font-size: 28px;
+    cursor: pointer;
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 48
+
 }

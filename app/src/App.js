@@ -19,7 +19,7 @@ function App() {
     const temp = accounts;
     temp.push(<AccCard key={info1.data.id} accInfo={info1} rankInfo={info2} region={region} regionName={regionName} patch={patch} loadAcc={loadAccount}/>);
     setAccounts(temp);
-    setRerender(!rerender);
+    setRerender(current => !current);
   }
 
   const loadAccount = (accInfo,region) => {
@@ -27,24 +27,48 @@ function App() {
     setCurrentAcc(temp);
     const temp2 = region;
     setRegion(temp2);
-    //getMatches(region,accInfo.data.puuid,0,10);
     setRerender(current => !current);
   }
 
+  function handleClear() {
+    let temp;
+    temp = [];
+    setAccounts(temp);
+    temp = undefined;
+    setCurrentAcc(temp);
+    setRegion(temp);
+  }
 
-  useEffect(() => {  },[rerender]);
+
+  useEffect(() => {  },[rerender,accounts]);
 
   return (
     <div className="App h-screen bg-gradient-to-b from-slate-900 to-sky-900  text-gray-100 overflow-hidden">
       <NavBar addAcc={addAccount} />
       <main className=" h-[100vh] flex divide-x divide-sky-900 z-1">
         <aside className="basis-1/4 pt-16">
-          <div className="sticky h-[92vh] overflow-y-auto overscroll-contain scrollbar pt-4 flex flex-col items-center top-16 divide-y divide-sky-900">
-           { accounts.length === 0 ? <p className="text-xl text-slate-600 pt-4">No accounts added.</p> : accounts } 
+          <div className="sticky h-[100%] overflow-y-auto overscroll-contain scrollbar pt-4 flex flex-col items-center top-16 divide-y divide-sky-900">
+            { accounts.length === 0 ? 
+              <p className="text-xl text-slate-600 pt-4">No accounts added.</p> 
+            : 
+              [
+                ...accounts,
+                <div id="clearBtn" onClick={handleClear} className="sticky top-full pt-2 px-2 m-2 ml-auto rounded bg-red-600">
+                  <span className="material-symbols-outlined">delete</span>
+                </div>
+              ]
+            }
           </div>
         </aside>
         <div className="basis-3/4 pt-16 overflow-y-auto scrollbar">
-          <Dashboard props={{currentAcc ,region}}/>
+          { currentAcc ?
+              <Dashboard props={{currentAcc ,region}}/>
+            :
+              <div id="dashboard" className="pt-4">
+                <p className="text-xl text-slate-600 pt-4 text-center">No account selected.</p>
+              </div>
+          }
+          
         </div>
       </main>
     </div>
