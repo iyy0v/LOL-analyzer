@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { filterRank,joinChampions,numberWithSpaces,toDateTime,getRegionName } from "../scripts";
+import { filterRank,joinChampions,numberWithSpaces,toDateTime,getRegionName, getMatches } from "../scripts";
 
 export default function Dashboard(props) { 
     const [patch, setPatch] = useState("");
@@ -72,6 +72,20 @@ export default function Dashboard(props) {
         .catch((err) => {console.log(err)});
     }
 
+    
+    function getMMR() {
+        axios({
+            url: "https://euw.whatismymmr.com/api/v1/summoner?name=" + info.name,
+            method: "GET"
+        })
+        .then((res1) => {
+            console.log(res1);
+        })
+        .catch((err) => {console.log(err)});
+
+    }
+
+
     useEffect(() =>{
         if(info !== undefined && (typeof region) === "string") render();
     },[info,region]);
@@ -92,7 +106,10 @@ export default function Dashboard(props) {
                                 <img src={"https://ddragon.leagueoflegends.com/cdn/" + patch + "/img/profileicon/" + info.profileIconId + ".png"} alt="profile icon" className="w-28 rounded-2xl"/>
                                 <p className="w-min px-1 relative top-[-13px] mx-auto rounded bg-slate-900 ">{info.summonerLevel}</p>
                             </div>
-                            <p className="w-fit px-4 py-2 text-5xl">{info.name} <sup className="text-sm align-super">({regionName})</sup></p>
+                            <div>
+                                <p className="w-fit px-4 py-2 text-5xl">{info.name} <sup className="text-sm align-super">({regionName})</sup></p>
+                                <button id="mmrBtn" onClick={getMMR} className="px-3 py-1 mx-4 mt-4 rounded bg-slate-600">View MMR</button>
+                            </div>
                         </div>
                         <div id="leftInfo" className="flex flex-col justify-around">
                             <p className="py-2 text-gray-400">Ranked Solo : <strong>{rank !== undefined ? rank.solo !== undefined ? rank.solo.tier + " " + rank.solo.rank + " - " + rank.solo.leaguePoints + " LP" : "Unranked" : "Unranked"}</strong></p>

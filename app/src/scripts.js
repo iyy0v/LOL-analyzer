@@ -134,4 +134,3 @@ export function joinChampions(res1,champs) {
     }
     return res1;
 }
-

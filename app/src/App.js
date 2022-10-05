@@ -53,8 +53,8 @@ function App() {
             : 
               [
                 ...accounts,
-                <div id="clearBtn" onClick={handleClear} className="sticky top-full pt-2 px-2 m-2 ml-auto rounded bg-red-600">
-                  <span className="material-symbols-outlined">delete</span>
+                <div id="clearBtn" onClick={handleClear} className="sticky flex flex-row justify-center w-[95%] top-full py-2 my-2 mx-auto ml-auto rounded bg-red-600 clickable">
+                  <span className="material-symbols-outlined ">delete</span>
                 </div>
               ]
             }

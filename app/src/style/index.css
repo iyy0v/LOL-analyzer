@@ -35,10 +35,11 @@ body {
     height: 40px;
     margin-top: 5px;
 }
-
+.clickable {   
+    cursor: pointer;
+}
 .material-symbols-outlined {
     font-size: 28px;
-    cursor: pointer;
     font-variation-settings:
         'FILL' 0,
         'wght' 400,
