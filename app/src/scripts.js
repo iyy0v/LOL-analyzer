@@ -134,3 +134,11 @@ export function joinChampions(res1,champs) {
     }
     return res1;
 }
+
+export function getResult(puuid,match) {
+    const players = match.data.info.participants;
+    for(let i in players) {
+        if(puuid === players[i].puuid) return players[i].win;
+    }
+    return false;
+}

@@ -47,3 +47,7 @@ body {
         'opsz' 48
 
 }
+.ratio {
+    width: 200px;
+    height: 200px;
+} 

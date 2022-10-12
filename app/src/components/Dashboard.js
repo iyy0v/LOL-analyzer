@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { filterRank,joinChampions,numberWithSpaces,toDateTime,getRegionName, getMatches } from "../scripts";
+import Stats from './Stats';
 
 export default function Dashboard(props) { 
     const [patch, setPatch] = useState("");
@@ -120,7 +121,7 @@ export default function Dashboard(props) {
                         <div id="mainChamps" className="flex flex-row my-2 overflow-x-auto scrollbar snap-x snap-normal ">
                             {mains.length > 0 ? mains : <p className="text-xl text-slate-600 pt-4 text-center">None</p>} 
                         </div>
-                        
+                        <Stats props={{info ,region}}/>
                     </div>
                 </div>
             }
