@@ -75,14 +75,35 @@ export default function Dashboard(props) {
 
     
     function getMMR() {
-        axios({
-            url: "https://euw.whatismymmr.com/api/v1/summoner?name=" + info.name,
-            method: "GET"
-        })
-        .then((res1) => {
-            console.log(res1);
-        })
-        .catch((err) => {console.log(err)});
+        let reg;
+        switch(region) {
+            case "euw1":
+                reg = "euw";
+                break;
+            case "eun1":
+                reg = "eune";
+                break;
+            case "na1":
+                reg = "na";
+                break;
+            case "kr":
+                reg = "kr";
+                break;
+            default:
+                reg = "";
+                break;
+        }
+        if(reg) {
+            window.open("https://" + reg + ".whatismymmr.com/" + info.name);
+        }
+        else {
+            const newMsg = document.createElement("p");
+            newMsg.setAttribute("class","mx-4 mt-4 text-red-200");
+            newMsg.textContent = "Unavailable for this region";
+            const button = document.getElementById("mmrBtn");
+            button.parentNode.replaceChild(newMsg,button);
+        }
+        
 
     }
 
@@ -102,7 +123,7 @@ export default function Dashboard(props) {
             : //Account selected
                 <div id="dashboard" className="px-[10%] py-16 divide-y divide-slate-600">
                     <div id="accountInfos" className="flex flex-row justify-between w-full">
-                        <div id="rightInfo"  className="flex flex-row">
+                        <div id="leftInfo"  className="flex flex-row">
                             <div>
                                 <img src={"https://ddragon.leagueoflegends.com/cdn/" + patch + "/img/profileicon/" + info.profileIconId + ".png"} alt="profile icon" className="w-28 rounded-2xl"/>
                                 <p className="w-min px-1 relative top-[-13px] mx-auto rounded bg-slate-900 ">{info.summonerLevel}</p>
@@ -112,9 +133,9 @@ export default function Dashboard(props) {
                                 <button id="mmrBtn" onClick={getMMR} className="px-3 py-1 mx-4 mt-4 rounded bg-slate-600">View MMR</button>
                             </div>
                         </div>
-                        <div id="leftInfo" className="flex flex-col justify-around">
-                            <p className="py-2 text-gray-400">Ranked Solo : <strong>{rank !== undefined ? rank.solo !== undefined ? rank.solo.tier + " " + rank.solo.rank + " - " + rank.solo.leaguePoints + " LP" : "Unranked" : "Unranked"}</strong></p>
-                            <p className="py-2 text-gray-400">Ranked Flex : <strong>{rank !== undefined ? rank.flex !== undefined ? rank.flex.tier + " " + rank.flex.rank + " - " + rank.flex.leaguePoints + " LP" : "Unranked" : "Unranked"}</strong></p>
+                        <div id="rightInfo" className="flex flex-col justify-around mb-2">
+                            <p className="text-gray-400">Ranked Solo : <strong>{rank !== undefined ? rank.solo !== undefined ? rank.solo.tier + " " + rank.solo.rank + " - " + rank.solo.leaguePoints + " LP" : "Unranked" : "Unranked"}</strong></p>
+                            <p className="text-gray-400">Ranked Flex : <strong>{rank !== undefined ? rank.flex !== undefined ? rank.flex.tier + " " + rank.flex.rank + " - " + rank.flex.leaguePoints + " LP" : "Unranked" : "Unranked"}</strong></p>
                         </div>
                     </div>
                     <div id="accountStats">

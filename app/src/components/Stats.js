@@ -8,6 +8,7 @@ Chart.register(ArcElement, Tooltip);
 
 export default function Stats(props) {
     const [normalW, setNormalW] = useState(0);
+    const [loaded, setLoaded] = useState(false);
     const region = props.props.region;
     const info = props.props.info;
 
@@ -72,30 +73,38 @@ export default function Stats(props) {
                 regionName = "sea";
                 break;
         }
+        setLoaded(true);
         
         axios({ // get normal games
-            url: "https://" + regionName + ".api.riotgames.com/lol/match/v5/matches/by-puuid/" + info.puuid + "/ids?type=normal&api_key=" + API_KEY,
+            url: "https://" + regionName + ".api.riotgames.com/lol/match/v5/matches/by-puuid/" + info.puuid + "/ids?type=normal&start=0&count=20&api_key=" + API_KEY,
             method: "GET"
         })
         .then((matches) => {
+            console.log(matches);
             for(let i in matches.data) {
-                axios({
-                    url: "https://" + regionName + ".api.riotgames.com/lol/match/v5/matches/" + matches.data[i] +"?api_key=" + API_KEY,
-                    method: "GET"
-                })
-                .then((match) => {
-                    if(getResult(info.puuid,match)) setNormalW(normalW+1);
-                })
-                .catch((err) => console.log(err));
+                setTimeout(() => {
+                    axios({
+                        url: "https://" + regionName + ".api.riotgames.com/lol/match/v5/matches/" + matches.data[i] +"?api_key=" + API_KEY,
+                        method: "GET"
+                    })
+                    .then((match) => {
+                        console.log(getResult(info.puuid,match));
+                        if(getResult(info.puuid,match)) {
+                            setNormalW(normalW + 1);
+                        }
+                    })
+                    .catch((err) => console.log(err));
+                }, 1000);
             }
-            console.log(normalW);
         })
         .catch((err) => console.log(err));
+        console.log("render");
     }
 
     useEffect(() =>{
-        render();
-    },[]);
+        if(!loaded) render();
+        console.log(normalW);
+    },[info,region,normalW]);
 
     return(
         <div id="stats" className="p-4 rounded shadow-md backdrop-brightness-90">
