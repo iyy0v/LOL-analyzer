@@ -68,13 +68,12 @@ export default function Dashboard(props) {
                 .catch(console.log);
             })
             .catch((err) => {console.log(err)});
-            
         })
         .catch((err) => {console.log(err)});
     }
 
     
-    function getMMR() {
+    function checkMMR() {
         let reg;
         switch(region) {
             case "euw1":
@@ -103,8 +102,6 @@ export default function Dashboard(props) {
             const button = document.getElementById("mmrBtn");
             button.parentNode.replaceChild(newMsg,button);
         }
-        
-
     }
 
 
@@ -130,7 +127,7 @@ export default function Dashboard(props) {
                             </div>
                             <div>
                                 <p className="w-fit px-4 py-2 text-5xl">{info.name} <sup className="text-sm align-super">({regionName})</sup></p>
-                                <button id="mmrBtn" onClick={getMMR} className="px-3 py-1 mx-4 mt-4 rounded bg-slate-600">View MMR</button>
+                                <button id="mmrBtn" onClick={checkMMR} className="px-3 py-1 mx-4 mt-4 rounded bg-slate-600">View MMR</button>
                             </div>
                         </div>
                         <div id="rightInfo" className="flex flex-col justify-around mb-2">

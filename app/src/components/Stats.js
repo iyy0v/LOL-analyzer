@@ -7,49 +7,27 @@ Chart.register(ArcElement, Tooltip);
 
 
 export default function Stats(props) {
+    const [old,setOld] = useState(undefined);
     const [normalW, setNormalW] = useState(0);
+    const [rankedW, setRankedW] = useState(0);
     const [loaded, setLoaded] = useState(false);
     const region = props.props.region;
     const info = props.props.info;
 
-    const normalData = {
-        labels: ['Losses','Wins'],
-        datasets: [{
-          label: 'Win/Loss ratio',
-          backgroundColor: ['rgba(255, 99, 132, 0.5)','rgba(75, 192, 192, 0.5)'],
-          borderColor: ['rgba(255, 99, 132, 0.8)','rgba(75, 192, 192, 0.8)'],
-          hoverBorderColor: ['rgb(255, 99, 132)','rgb(65, 182, 182)'],
-          hoverBorderWidth: 2,
-          spacing: 0,
-          data: [12,8],
-        }]
-    };
-    const soloData = {
-        labels: ['Losses','Wins'],
-        datasets: [{
-          label: 'Win/Loss ratio',
-          backgroundColor: ['rgba(255, 99, 132, 0.5)','rgba(75, 192, 192, 0.5)'],
-          borderColor: ['rgba(255, 99, 132, 0.8)','rgba(75, 192, 192, 0.8)'],
-          hoverBorderColor: ['rgb(255, 99, 132)','rgb(65, 182, 182)'],
-          hoverBorderWidth: 2,
-          spacing: 0,
-          data: [10,10],
-        }]
-    };
-    const flexData = {
-        labels: ['Losses','Wins'],
-        datasets: [{
-          label: 'Win/Loss ratio',
-          backgroundColor: ['rgba(255, 99, 132, 0.5)','rgba(75, 192, 192, 0.5)'],
-          borderColor: ['rgba(255, 99, 132, 0.8)','rgba(75, 192, 192, 0.8)'],
-          hoverBorderColor: ['rgb(255, 99, 132)','rgb(65, 182, 182)'],
-          hoverBorderWidth: 2,
-          spacing: 0,
-          data: [4,16],
-        }]
-    };
 
-    function render() {
+    async function getMatchRes(regionName,matchID,API_KEY) {
+        return axios({
+            url: "https://" + regionName + ".api.riotgames.com/lol/match/v5/matches/" + matchID +"?api_key=" + API_KEY,
+            method: "GET"
+        })
+        .then((match) => {
+            console.log(match);
+            return getResult(info.puuid,match);
+        })
+        .catch((err) => console.log(err));
+    }
+
+    if(info != old) {
         const API_KEY = process.env.REACT_APP_API_KEY;
         let regionName;
         switch(region) {
@@ -73,41 +51,56 @@ export default function Stats(props) {
                 regionName = "sea";
                 break;
         }
-        setLoaded(true);
+        setLoaded(false);
+        setOld(info);
         
         axios({ // get normal games
             url: "https://" + regionName + ".api.riotgames.com/lol/match/v5/matches/by-puuid/" + info.puuid + "/ids?type=normal&start=0&count=20&api_key=" + API_KEY,
             method: "GET"
         })
         .then((matches) => {
-            console.log(matches);
+            let wins = 0;
             for(let i in matches.data) {
                 setTimeout(() => {
-                    axios({
-                        url: "https://" + regionName + ".api.riotgames.com/lol/match/v5/matches/" + matches.data[i] +"?api_key=" + API_KEY,
-                        method: "GET"
-                    })
-                    .then((match) => {
-                        console.log(getResult(info.puuid,match));
-                        if(getResult(info.puuid,match)) {
-                            setNormalW(normalW + 1);
-                        }
-                    })
-                    .catch((err) => console.log(err));
-                }, 1000);
+                    getMatchRes(regionName,matches.data[i],API_KEY)
+                    .then(result =>{
+                        if(result) wins++;
+                        setNormalW(wins);
+                    });
+                },i*100);
             }
+
+            setTimeout(() =>{setLoaded(true)},2000);  
+        })
+        .catch((err) => console.log(err));
+
+        axios({ // get ranked games
+            url: "https://" + regionName + ".api.riotgames.com/lol/match/v5/matches/by-puuid/" + info.puuid + "/ids?type=ranked&start=0&count=20&api_key=" + API_KEY,
+            method: "GET"
+        })
+        .then((matches) => {
+            console.log(matches);
+            let wins = 0;
+            for(let i in matches.data) {
+                setTimeout(() => {
+                    getMatchRes(regionName,matches.data[i],API_KEY)
+                    .then(result =>{
+                        if(result) wins++;
+                        console.log(wins);
+                    });
+                },i*100);
+            }
+
+            setTimeout(() =>{setLoaded(true)},2000);  
         })
         .catch((err) => console.log(err));
         console.log("render");
     }
+    
 
-    useEffect(() =>{
-        if(!loaded) render();
-        console.log(normalW);
-    },[info,region,normalW]);
-
-    return(
-        <div id="stats" className="p-4 rounded shadow-md backdrop-brightness-90">
+    function display() {
+        if(loaded) {
+            return (<>
             <div id="ratios"  className="flex flex-row justify-around">
                 <div id="normalRatio" className='ratio'>
                     <h2 className="text-xl text-center my-2">Normal</h2>
@@ -123,6 +116,57 @@ export default function Stats(props) {
                 </div>
             </div>
             <p className="text-center text-sm text-gray-500 pt-12">Stats for the last 20 matches played in each mode</p>
+        </>);
+        }
+        else {
+            return "Loading...";
+        }
+    }
+
+    useEffect(() =>{
+        display();
+    },[info,loaded]);
+
+    const normalData = {
+        labels: ['Losses','Wins'],
+        datasets: [{
+          label: 'Win/Loss ratio',
+          backgroundColor: ['rgba(255, 99, 132, 0.5)','rgba(75, 192, 192, 0.5)'],
+          borderColor: ['rgba(255, 99, 132, 0.8)','rgba(75, 192, 192, 0.8)'],
+          hoverBorderColor: ['rgb(255, 99, 132)','rgb(65, 182, 182)'],
+          hoverBorderWidth: 2,
+          spacing: 0,
+          data: [20 - normalW,normalW],
+        }]
+    };
+    const soloData = {
+        labels: ['Losses','Wins'],
+        datasets: [{
+          label: 'Win/Loss ratio',
+          backgroundColor: ['rgba(255, 99, 132, 0.5)','rgba(75, 192, 192, 0.5)'],
+          borderColor: ['rgba(255, 99, 132, 0.8)','rgba(75, 192, 192, 0.8)'],
+          hoverBorderColor: ['rgb(255, 99, 132)','rgb(65, 182, 182)'],
+          hoverBorderWidth: 2,
+          spacing: 0,
+          data: [20 - rankedW,rankedW],
+        }]
+    };
+    const flexData = {
+        labels: ['Losses','Wins'],
+        datasets: [{
+          label: 'Win/Loss ratio',
+          backgroundColor: ['rgba(255, 99, 132, 0.5)','rgba(75, 192, 192, 0.5)'],
+          borderColor: ['rgba(255, 99, 132, 0.8)','rgba(75, 192, 192, 0.8)'],
+          hoverBorderColor: ['rgb(255, 99, 132)','rgb(65, 182, 182)'],
+          hoverBorderWidth: 2,
+          spacing: 0,
+          data: [4,16],
+        }]
+    };
+
+    return(
+        <div id="stats" className="p-4 rounded shadow-md backdrop-brightness-90">
+            { display() }
         </div>
     );
 }
