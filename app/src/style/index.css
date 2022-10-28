@@ -38,6 +38,10 @@ body {
 .clickable {   
     cursor: pointer;
 }
+.ratio {
+    height: 200px;
+    width: 200px;
+}
 .material-symbols-outlined {
     font-size: 28px;
     font-variation-settings:
@@ -47,7 +51,3 @@ body {
         'opsz' 48
 
 }
-.ratio {
-    width: 200px;
-    height: 200px;
-} 

@@ -9,7 +9,8 @@ Chart.register(ArcElement, Tooltip);
 export default function Stats(props) {
     const [old,setOld] = useState(undefined);
     const [normalW, setNormalW] = useState(0);
-    const [rankedW, setRankedW] = useState(0);
+    const [solo, setSolo] = useState({});
+    const [flex, setFlex] = useState({});
     const [loaded, setLoaded] = useState(false);
     const region = props.props.region;
     const info = props.props.info;
@@ -74,24 +75,34 @@ export default function Stats(props) {
         })
         .catch((err) => console.log(err));
 
+        console.log(info);
         axios({ // get ranked games
-            url: "https://" + regionName + ".api.riotgames.com/lol/match/v5/matches/by-puuid/" + info.puuid + "/ids?type=ranked&start=0&count=20&api_key=" + API_KEY,
+            url: "https://" + region + ".api.riotgames.com/lol/league/v4/entries/by-summoner/" + info.id +"?api_key=" + API_KEY,
             method: "GET"
         })
-        .then((matches) => {
-            console.log(matches);
-            let wins = 0;
-            for(let i in matches.data) {
-                setTimeout(() => {
-                    getMatchRes(regionName,matches.data[i],API_KEY)
-                    .then(result =>{
-                        if(result) wins++;
-                        console.log(wins);
-                    });
-                },i*100);
+        .then((res) => {
+            console.log(res);
+            let srW, srL, frW, frL;
+            for(let i in res.data) {
+                if(res.data[i].queueType === 'RANKED_SOLO_5x5') {
+                    srW = res.data[i].wins;
+                    srL = res.data[i].losses;
+                }
+                if(res.data[i].queueType === 'RANKED_FLEX_SR') {
+                    frW = res.data[i].wins;
+                    frL = res.data[i].losses;
+                }
             }
-
-            setTimeout(() =>{setLoaded(true)},2000);  
+            if(srW === undefined) {
+                srW = 0;
+                srL = 0;
+            }
+            if(frW === undefined) {
+                frW = 0;
+                frL = 0;
+            }
+            setSolo({srW,srL});
+            setFlex({frW,frL});
         })
         .catch((err) => console.log(err));
         console.log("render");
@@ -101,21 +112,42 @@ export default function Stats(props) {
     function display() {
         if(loaded) {
             return (<>
-            <div id="ratios"  className="flex flex-row justify-around">
-                <div id="normalRatio" className='ratio'>
+            <div id="ratios" className="flex flex-row justify-around min-h-max">
+                <div id="normalRatio" className='min-h-max'>
                     <h2 className="text-xl text-center my-2">Normal</h2>
-                    <Doughnut id="ratio" data={normalData} />
+                    <Doughnut className='ratio' data={normalData} />
+                    <p className='z-99 relative top-[-38%] right-[-38%] text-green-300'>W: {Math.round(normalW*100 / 20)}%</p>
+                    <p className='z-99 relative top-[-38%] right-[-38%] text-red-300'>L : {Math.round((20-normalW)*100 / 20)}%</p>
+                    <p className="text-center text-sm text-gray-500 relative bottom-8">Last 20 matches played</p>
                 </div>
-                <div id="soloRatio" className='ratio'>
+                <div id="soloRatio" className='min-h-max'>
                     <h2 className="text-xl text-center my-2">Solo ranked</h2>
-                    <Doughnut id="ratio" data={soloData} />
+                    {solo.srW === 0 && solo.srL === 0
+                    ?
+                        <p className="text-center text-sm text-gray-500 pt-[50%]">No matches.</p>
+                    :
+                        <>
+                        <Doughnut className='ratio' data={soloData} />
+                        <p className='z-99 relative top-[-38%] right-[-38%] text-green-300'>W: {Math.round(solo.srW*100 / (solo.srW+solo.srL))}%</p>
+                        <p className='z-99 relative top-[-38%] right-[-38%] text-red-300'>L : {Math.round(solo.srL*100 / (solo.srW+solo.srL))}%</p>
+                        </>
+                    }
                 </div>
-                <div id="flexRatio" className='ratio'>
+                <div id="flexRatio" className='min-h-max'>
                     <h2 className="text-xl text-center my-2">Flex ranked</h2>
-                    <Doughnut id="ratio" data={flexData} />
+                    {flex.frW === 0 && flex.frL === 0
+                    ?
+                        <p className="text-center text-sm text-gray-500 pt-[50%]">No matches.</p>
+                    :   
+                        <>
+                        <Doughnut className='ratio z-1' data={flexData} />
+                        <p className='z-99 relative top-[-38%] right-[-38%] text-green-300'>W: {Math.round(flex.frW*100 / (flex.frW+flex.frL))}%</p>
+                        <p className='z-99 relative top-[-38%] right-[-38%] text-red-300'>L : {Math.round(flex.frL*100 / (flex.frW+flex.frL))}%</p>
+                        </>
+                    }
                 </div>
             </div>
-            <p className="text-center text-sm text-gray-500 pt-12">Stats for the last 20 matches played in each mode</p>
+            
         </>);
         }
         else {
@@ -148,7 +180,7 @@ export default function Stats(props) {
           hoverBorderColor: ['rgb(255, 99, 132)','rgb(65, 182, 182)'],
           hoverBorderWidth: 2,
           spacing: 0,
-          data: [20 - rankedW,rankedW],
+          data: [solo.srL,solo.srW],
         }]
     };
     const flexData = {
@@ -160,7 +192,7 @@ export default function Stats(props) {
           hoverBorderColor: ['rgb(255, 99, 132)','rgb(65, 182, 182)'],
           hoverBorderWidth: 2,
           spacing: 0,
-          data: [4,16],
+          data: [flex.frL,flex.frW],
         }]
     };
 

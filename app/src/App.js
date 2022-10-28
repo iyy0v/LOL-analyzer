@@ -53,7 +53,7 @@ function App() {
             : 
               [
                 ...accounts,
-                <div id="clearBtn" onClick={handleClear} className="sticky flex flex-row justify-center w-[95%] top-full py-2 my-2 mx-auto ml-auto rounded bg-red-600 clickable">
+                <div id="clearBtn" key="clearBtn" onClick={handleClear} className="sticky flex flex-row justify-center w-[95%] top-full py-2 my-2 mx-auto ml-auto rounded bg-red-600 clickable">
                   <span className="material-symbols-outlined ">delete</span>
                 </div>
               ]
@@ -62,7 +62,7 @@ function App() {
         </aside>
         <div className="basis-3/4 pt-16 overflow-y-auto scrollbar">
           { currentAcc ?
-              <Dashboard props={{currentAcc ,region}}/>
+              <Dashboard props={{currentAcc , region , patch}}/>
             :
               <div id="dashboard" className="pt-4">
                 <p className="text-xl text-slate-600 pt-4 text-center">No account selected.</p>

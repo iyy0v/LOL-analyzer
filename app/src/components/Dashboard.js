@@ -4,19 +4,15 @@ import { filterRank,joinChampions,numberWithSpaces,toDateTime,getRegionName, get
 import Stats from './Stats';
 
 export default function Dashboard(props) { 
-    const [patch, setPatch] = useState("");
     const [rank,setRank] = useState();
     const [mastery,setMastery] = useState();
     const [mains,setMains] = useState([]);
-
-    fetch('https://ddragon.leagueoflegends.com/api/versions.json') // Get current patch version
-    .then(res => res.json()).then(result => setPatch(result[0]))
-    .catch(console.log);
     
+    const patch = props.props.patch;
     const account = props.props.currentAcc;
+    const info = account.data;
     const region = props.props.region;
     const regionName = getRegionName(region);
-    const info = account.data;
 
     
     function render() {
