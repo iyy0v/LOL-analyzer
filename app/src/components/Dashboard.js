@@ -59,7 +59,6 @@ export default function Dashboard(props) {
                         );
                     }
                     setMains(temp);
-                    console.log(mastery);
                 })
                 .catch(console.log);
             })

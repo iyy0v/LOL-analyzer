@@ -42,6 +42,10 @@ body {
     height: 200px;
     width: 200px;
 }
+.radar {
+    height: 600px !important;
+    width: 600px !important;
+}
 .material-symbols-outlined {
     font-size: 28px;
     font-variation-settings:

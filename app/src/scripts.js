@@ -142,3 +142,9 @@ export function getResult(puuid,match) {
     }
     return false;
 }
+
+export function findSummoner(summoner,summoners) {
+    for(let i in summoners) {
+        if(summoners[i].summonerName === summoner) return summoners[i];
+    }
+}
