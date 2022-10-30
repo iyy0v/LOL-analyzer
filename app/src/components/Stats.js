@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState,useEffect } from 'react';
 import { getResult , findSummoner} from '../scripts';
-import {Chart as ChartJS, ArcElement, Tooltip, Legend, RadialLinearScale, PointElement, LineElement} from 'chart.js'
+import {Chart as ChartJS, ArcElement, Tooltip, RadialLinearScale, PointElement, LineElement} from 'chart.js'
 import { Doughnut , Radar } from 'react-chartjs-2';
 ChartJS.register(ArcElement, Tooltip, RadialLinearScale, PointElement, LineElement);
 
@@ -146,7 +146,6 @@ export default function Stats(props) {
             }
         })
         .catch((err) => console.log(err));
-        
 
         setTimeout(() =>{setLoaded(true)},3000);  
         console.log("render");
@@ -192,7 +191,7 @@ export default function Stats(props) {
                 </div>
             </div>
             <div id="lanes">
-                <h2 className="text-xl text-center my-2 mt-5">Lanes</h2>
+                <h2 className="text-2xl text-center mt-5">Lanes</h2>
                 <Radar data={lanesData} options={lanesOptions} className="radar mx-auto"/>
                 <p className="text-center text-sm text-gray-500 relative bottom-8">Last 20 matches played</p>
             </div>
@@ -282,6 +281,7 @@ export default function Stats(props) {
                     }
                 },
                 min: 0,
+                suggestedMax: 1,
                 backgroundColor: 'rgba(0, 0, 0, 0.08)'
             }
         }

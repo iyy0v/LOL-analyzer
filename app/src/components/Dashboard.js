@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { filterRank,joinChampions,numberWithSpaces,toDateTime,getRegionName, getMatches } from "../scripts";
 import Stats from './Stats';
+import LastBuild from "./LastBuild";
 
 export default function Dashboard(props) { 
     const [rank,setRank] = useState();
@@ -43,7 +44,7 @@ export default function Dashboard(props) {
                     let temp;
                     temp = [];
                     setMains([]);
-                    for(let i=0; i<n; i++) {  
+                    for(let i=0; i<n; i++) {
                         temp.push(
                             <span id="main1" key={mastery[i].champion.name} className="flex flex-row w-[400px] min-w-max p-2 m-2 rounded shadow-md snap-start backdrop-brightness-90">
                                 <img src={"http://ddragon.leagueoflegends.com/cdn/12.18.1/img/champion/" + mastery[i].champion.id + ".png"} alt={mastery[i].champion.name + " image"} className="w-[80px] h-[80px] rounded-xl"/>
@@ -135,6 +136,7 @@ export default function Dashboard(props) {
                             {mains.length > 0 ? mains : <p className="text-xl text-slate-600 pt-4 text-center">None</p>} 
                         </div>
                         <Stats props={{info ,region}}/>
+                        <LastBuild />
                     </div>
                 </div>
             }
