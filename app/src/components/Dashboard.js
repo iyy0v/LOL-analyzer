@@ -109,7 +109,7 @@ export default function Dashboard(props) {
 
     return(
         <>
-            {info === undefined ? 
+            {info === undefined || region === undefined ? 
                 <div id="dashboard" className="pt-4">
                     <p className="text-xl text-slate-600 pt-4 text-center">No account selected.</p>
                 </div>
@@ -135,8 +135,8 @@ export default function Dashboard(props) {
                         <div id="mainChamps" className="flex flex-row my-2 overflow-x-auto scrollbar snap-x snap-normal ">
                             {mains.length > 0 ? mains : <p className="text-xl text-slate-600 pt-4 text-center">None</p>} 
                         </div>
-                        <Stats props={{info ,region}}/>
-                        <LastBuild />
+                        <Stats props={{info, region}}/>
+                        <LastBuild props={{info, region}}/>
                     </div>
                 </div>
             }
