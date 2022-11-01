@@ -36,9 +36,10 @@ export default function Dashboard(props) {
             .then((res1) => {
                 fetch('http://ddragon.leagueoflegends.com/cdn/' + patch + '/data/en_US/champion.json')
                 .then(res2 => res2.json()).then(champs => {
-                    const mastery = joinChampions(res1,champs);
+                    const mastery = joinChampions(res1.data,champs);
                     setMastery(mastery);
-
+                    console.log(mastery);
+                    
                     // Process main champions
                     let n;
                     if(mastery.length > 10) n = 10;
@@ -50,7 +51,7 @@ export default function Dashboard(props) {
                     for(let i=0; i<n; i++) {
                         temp.push(
                             <span id="main1" key={mastery[i].champion.name} className="flex flex-row w-[400px] min-w-max p-2 m-2 rounded shadow-md snap-start backdrop-brightness-90">
-                                <img src={"http://ddragon.leagueoflegends.com/cdn/12.18.1/img/champion/" + mastery[i].champion.id + ".png"} alt={mastery[i].champion.name + " image"} className="w-[80px] h-[80px] rounded-xl"/>
+                                <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + mastery[i].champion.id + ".png"} alt={mastery[i].champion.name + " image"} className="w-[80px] h-[80px] rounded-xl"/>
                                 <span className="mx-2">
                                     <h3 className="text-2xl text-yellow-600">{mastery[i].champion.name}</h3>
                                     <img src={"https://github.com/RiotAPI/Riot-Games-API-Developer-Assets/blob/master/champion-mastery-icons/mastery-" + mastery[i].championLevel + ".png?raw=true"} alt="mastery icon" className="w-[40px] inline" />
@@ -153,7 +154,7 @@ export default function Dashboard(props) {
                             {mains.length > 0 ? mains : <p className="text-xl text-slate-600 pt-4 text-center">None</p>} 
                         </div>
                         <Stats props={{info, region, matches}}/>
-                        <History props={{info, region, matches}}/>
+                        <History props={{patch, info, region, matches}}/>
                         {/*<LastBuild props={{info, region}}/>*/}
                     </div>
                 </div>

@@ -69,7 +69,7 @@ export default function Stats(props) {
                         if(result) wins++;
                         setNormalW(wins);
                     });
-                },i*100);
+                },i*110);
             }
         })
         .catch((err) => console.log(err));
@@ -176,7 +176,7 @@ export default function Stats(props) {
         }
     }
 
-    useEffect(() =>{},[info,loaded]);
+    useEffect(() =>{},[info,matches,loaded]);
 
     const normalData = {
         labels: ['Losses','Wins'],

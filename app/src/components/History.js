@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { getRegionName2 } from "../scripts";
+import { getRegionName2, joinChampions } from "../scripts";
 
 export default function History(props) {
     const [loaded,setLoaded] = useState(false);
@@ -8,6 +8,7 @@ export default function History(props) {
     const [team1,setTeam1] = useState([]);
     const [team2,setTeam2] = useState([]);
 
+    const patch = props.props.patch;
     const info = props.props.info;
     const region = props.props.region;
     const matches = props.props.matches.data;
@@ -59,23 +60,41 @@ export default function History(props) {
                     console.log(mode);
 
                     let player;
-                    const players = match.participants;
                     const teams = {100:[],200:[]};
-                    for(let j in players) {
                         // add players to the card
-                        if(players[j].summonerId === info.id) {
-                            player = players[j];
-                            // + add bold name
-                            teams[player.teamId].push("YOU !");
+                    fetch('http://ddragon.leagueoflegends.com/cdn/' + patch + '/data/en_US/champion.json')
+                    .then(res2 => res2.json()).then(champs => {
+                        const players = joinChampions(match.participants,champs);
+                        console.log(players);
+                        for(let j in players) {
+                            if(players[j].summonerId === info.id) {
+                                player = players[j];
+                                // + add bold name
+                                teams[player.teamId].push(
+                                    <div>
+                                        <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + players[j].champion.id + ".png"} alt={players[j].champion.name + "'s image"} />
+                                        <p><strong>{players[j].summonerName}</strong></p>
+                                    </div>
+                                );
+                            }
+                            else {
+                                // add others
+                                teams[players[j].teamId].push(
+                                    <div>
+                                        <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + players[j].champion.id + ".png"} alt={players[j].champion.name + "'s image"} />
+                                        <p>{players[j].summonerName}</p>
+                                    </div>
+                                );
+                            }
                         }
-                        else {
-                            // add others
-                            teams[players[j].teamId].push(players[j].summonerName);
-                        }
-                    }
-                    setTeam1(teams[100]);
-                    setTeam2(teams[200]);
-                    console.log(teams);
+                        setTeam1(teams[100]);
+                        setTeam2(teams[200]);
+                        console.log(teams);
+                    })
+                    .catch((err) => console.log(err));
+                    
+                    
+                    
 
 
                 })
@@ -88,6 +107,20 @@ export default function History(props) {
             setLoaded(true);
         },3000);
     }
+
+    function render() {
+        return(
+            <div className="flex flex-row">
+                <div>
+                    {team1}
+                </div>
+                <div>
+                    {team2}
+                </div>
+            </div>
+        )
+    }
+
     useEffect(() => {
         setup();
     },[]);
@@ -95,6 +128,12 @@ export default function History(props) {
     return(
         <div id="history" className="p-4 mt-4 rounded shadow-md backdrop-brightness-90">
             <h2 className="text-2xl text-center mb-3">Matches History</h2>
+            {loaded
+            ?
+                render()
+            :
+                "Loading..."
+            }
         </div>
     )
 }

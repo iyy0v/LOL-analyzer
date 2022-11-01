@@ -145,7 +145,6 @@ export function filterRank(rank) {
 }
 
 export function joinChampions(res1,champs) {
-    res1 = res1.data;
     champs = champs.data;
     for(let i in res1) {
         for(let j in champs) {
