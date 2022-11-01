@@ -74,7 +74,6 @@ export default function Dashboard(props) {
                 method: "GET"
             })
             .then((result) => {
-                console.log(result);
                 setMatches(result);
             })
             .catch((err) => console.log(err));
@@ -120,12 +119,7 @@ export default function Dashboard(props) {
 
 
     useEffect(() =>{
-        
-        console.log(info !== undefined && (typeof region) === "string" && matches.length >0 && mains.length > 0);
-        if(info !== undefined && (typeof region) === "string") {
-            render();
-            console.log(info !== undefined && (typeof region) === "string" && matches.length > 0 && mains.length > 0);
-        }
+        if(info !== undefined && (typeof region) === "string") render();
     },[info,region]);
     
 

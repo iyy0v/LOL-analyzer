@@ -122,8 +122,7 @@ export default function Stats(props) {
 
         
         
-        setTimeout(() =>{setLoaded(true)},3000);  
-        console.log("render");
+        setTimeout(() =>{setLoaded(true)},3000);
     }
     
 
@@ -177,9 +176,7 @@ export default function Stats(props) {
         }
     }
 
-    useEffect(() =>{
-        display();
-    },[info,loaded]);
+    useEffect(() =>{},[info,loaded]);
 
     const normalData = {
         labels: ['Losses','Wins'],
