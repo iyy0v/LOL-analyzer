@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { filterRank,joinChampions,numberWithSpaces,toDateTime,getRegionName,getRegionName2 } from "../scripts";
 import Stats from './Stats';
+import History from "./History";
 import LastBuild from "./LastBuild";
 
 export default function Dashboard(props) { 
@@ -158,7 +159,8 @@ export default function Dashboard(props) {
                             {mains.length > 0 ? mains : <p className="text-xl text-slate-600 pt-4 text-center">None</p>} 
                         </div>
                         <Stats props={{info, region, matches}}/>
-                        <LastBuild props={{info, region}}/>
+                        <History props={{info, region, matches}}/>
+                        {/*<LastBuild props={{info, region}}/>*/}
                     </div>
                 </div>
             }

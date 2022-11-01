@@ -139,7 +139,7 @@ export default function Stats(props) {
                     <p className="text-center text-sm text-gray-500 relative bottom-8">Last 20 matches played</p>
                 </div>
                 <div id="soloRatio" className='min-h-max min-w-[200px]'>
-                    <h2 className="text-xl text-center my-2">Solo ranked</h2>
+                    <h2 className="text-xl text-center my-2">Ranked Solo</h2>
                     {solo.srW === 0 && solo.srL === 0
                     ?
                         <p className="text-center text-sm text-gray-500 pt-[50%]">No matches.</p>
@@ -152,7 +152,7 @@ export default function Stats(props) {
                     }
                 </div>
                 <div id="flexRatio" className='min-h-max min-w-[200px]'>
-                    <h2 className="text-xl text-center my-2">Flex ranked</h2>
+                    <h2 className="text-xl text-center my-2">Ranked Flex</h2>
                     {flex.frW === 0 && flex.frL === 0
                     ?
                         <p className="text-center text-sm text-gray-500 pt-[50%]">No matches.</p>
