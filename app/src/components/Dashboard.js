@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { filterRank,joinChampions,numberWithSpaces,toDateTime,getRegionName, getMatches } from "../scripts";
+import { filterRank,joinChampions,numberWithSpaces,toDateTime,getRegionName,getRegionName2 } from "../scripts";
 import Stats from './Stats';
 import LastBuild from "./LastBuild";
 
@@ -8,13 +8,15 @@ export default function Dashboard(props) {
     const [rank,setRank] = useState();
     const [mastery,setMastery] = useState();
     const [mains,setMains] = useState([]);
+    const [matches,setMatches] = useState([]);
+    const [loaded,setLoaded] = useState(false);
     
     const patch = props.props.patch;
     const account = props.props.currentAcc;
     const info = account.data;
     const region = props.props.region;
     const regionName = getRegionName(region);
-
+    const regionName2 = getRegionName2(region);
     
     function render() {
         const API_KEY = process.env.REACT_APP_API_KEY;
@@ -26,7 +28,7 @@ export default function Dashboard(props) {
             //Process Ranks
             let temp = filterRank(res);
             setRank(temp);
-            axios({
+            axios({ // Mastery
                 url: "https://" + region + ".api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/" + info.id + "?api_key=" + API_KEY,
                 method: "GET"
             })
@@ -64,8 +66,23 @@ export default function Dashboard(props) {
                 .catch(console.log);
             })
             .catch((err) => {console.log(err)});
+
+
+            axios({ // 20 last matches
+                url: "https://" + regionName2 + ".api.riotgames.com/lol/match/v5/matches/by-puuid/" + info.puuid + "/ids?&start=0&count=20&api_key=" + API_KEY,
+                method: "GET"
+            })
+            .then((result) => {
+                console.log(result);
+                setMatches(result);
+            })
+            .catch((err) => console.log(err));
         })
         .catch((err) => {console.log(err)});
+        
+        setTimeout(() => {
+            setLoaded(true);
+        },1000);
     }
 
     
@@ -102,14 +119,19 @@ export default function Dashboard(props) {
 
 
     useEffect(() =>{
-        if(info !== undefined && (typeof region) === "string") render();
+        
+        console.log(info !== undefined && (typeof region) === "string" && matches.length >0 && mains.length > 0);
+        if(info !== undefined && (typeof region) === "string") {
+            render();
+            console.log(info !== undefined && (typeof region) === "string" && matches.length > 0 && mains.length > 0);
+        }
     },[info,region]);
     
 
 
     return(
         <>
-            {info === undefined || region === undefined ? 
+            {loaded !== true ? 
                 <div id="dashboard" className="pt-4">
                     <p className="text-xl text-slate-600 pt-4 text-center">No account selected.</p>
                 </div>
@@ -135,7 +157,7 @@ export default function Dashboard(props) {
                         <div id="mainChamps" className="flex flex-row my-2 overflow-x-auto scrollbar snap-x snap-normal ">
                             {mains.length > 0 ? mains : <p className="text-xl text-slate-600 pt-4 text-center">None</p>} 
                         </div>
-                        <Stats props={{info, region}}/>
+                        <Stats props={{info, region, matches}}/>
                         <LastBuild props={{info, region}}/>
                     </div>
                 </div>

@@ -5,10 +5,11 @@ import { findSummoner } from "../scripts";
 export default function LastBuild(props) {
     const [live,setLive] = useState(false);
 
+    const API_KEY = process.env.REACT_APP_API_KEY;
+    const info = props.props.info;
+    const region = props.props.region;
+
     async function spectate() {
-        const API_KEY = process.env.REACT_APP_API_KEY;
-        const info = props.props.info;
-        const region = props.props.region;
 
         let regionName;
         switch(region) {
@@ -77,7 +78,7 @@ export default function LastBuild(props) {
             ?
                 <p>Playing.</p>
             :
-                <p>Not playing.</p>
+                <p className="text-center text-sm text-gray-500 my-9">{info.name} is not in-game right now.</p>
             }
         </div>
     )

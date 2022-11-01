@@ -49,6 +49,26 @@ export function getRegionName(region) {
     return region;
 }
 
+export function getRegionName2(region) {
+        switch(region) {
+            case "euw1":
+            case "eun1":
+            case "ru":
+            case "tr1":
+                return "europe";
+            case "na1":
+            case "la1":
+            case "la2":
+            case "br1":
+                return "americas";
+            case "kr":
+            case "jp1":
+                return "asia";
+            default:
+                return "sea";
+        }
+}
+
 export function getAccount(name,region) {
     const API_KEY = process.env.REACT_APP_API_KEY;
     axios({

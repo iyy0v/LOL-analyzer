@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState,useEffect } from 'react';
-import { getResult , findSummoner} from '../scripts';
+import { getResult , findSummoner , getRegionName2} from '../scripts';
 import {Chart as ChartJS, ArcElement, Tooltip, RadialLinearScale, PointElement, LineElement} from 'chart.js'
 import { Doughnut , Radar } from 'react-chartjs-2';
 ChartJS.register(ArcElement, Tooltip, RadialLinearScale, PointElement, LineElement);
@@ -15,7 +15,7 @@ export default function Stats(props) {
     const [loaded, setLoaded] = useState(false);
     const region = props.props.region;
     const info = props.props.info;
-
+    const matches = props.props.matches;
 
     async function getMatchRes(regionName,matchID,API_KEY) {
         return axios({
@@ -52,28 +52,7 @@ export default function Stats(props) {
 
     if(info != old) {
         const API_KEY = process.env.REACT_APP_API_KEY;
-        let regionName;
-        switch(region) {
-            case "euw1":
-            case "eun1":
-            case "ru":
-            case "tr1":
-                regionName = "europe";
-                break;
-            case "na1":
-            case "la1":
-            case "la2":
-            case "br1":
-                regionName = "americas";
-                break;
-            case "kr":
-            case "jp1":
-                regionName = "asia";
-                break;
-            default:
-                regionName = "sea";
-                break;
-        }
+        let regionName = getRegionName2(region);
         setLoaded(false);
         setOld(info);
         
@@ -124,36 +103,32 @@ export default function Stats(props) {
         })
         .catch((err) => console.log(err));
 
-        axios({ // get lanes
-            url: "https://" + regionName + ".api.riotgames.com/lol/match/v5/matches/by-puuid/" + info.puuid + "/ids?&start=0&count=20&api_key=" + API_KEY,
-            method: "GET"
-        })
-        .then((matches) => {
-            const lanes = {};
-            lanes['TOP'] = 0;
-            lanes['JUNGLE'] = 0;
-            lanes['MIDDLE'] = 0;
-            lanes['BOTTOM'] = 0;
-            lanes['UTILITY'] = 0;
-            for(let i in matches.data) {
-                setTimeout(() => {
-                    getMatchRole(info.name,regionName,matches.data[i],API_KEY)
-                    .then((result) => {
-                        lanes[result]++;
-                        setLanes(lanes);
-                    });
-                },i*110);
-            }
-        })
-        .catch((err) => console.log(err));
+        // get lanes
+        const lanes = {};
+        lanes['TOP'] = 0;
+        lanes['JUNGLE'] = 0;
+        lanes['MIDDLE'] = 0;
+        lanes['BOTTOM'] = 0;
+        lanes['UTILITY'] = 0;
+        for(let i in matches.data) {
+            setTimeout(() => {
+                getMatchRole(info.name,regionName,matches.data[i],API_KEY)
+                .then((result) => {
+                    lanes[result]++;
+                    setLanes(lanes);
+                });
+            },i*110);
+        }
 
+        
+        
         setTimeout(() =>{setLoaded(true)},3000);  
         console.log("render");
     }
     
 
     function display() {
-        if(loaded) {
+        if(loaded ) {
             return (<>
             <div id="ratios" className="flex flex-row justify-around min-h-max">
                 <div id="normalRatio" className='min-h-max min-w-[200px]'>
