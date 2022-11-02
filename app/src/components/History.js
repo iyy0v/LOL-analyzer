@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { getRegionName2, joinChampions } from "../scripts";
+import { getRegionName2, joinChampions, toDateTime } from "../scripts";
 
 export default function History(props) {
     const [loaded,setLoaded] = useState(false);
-    const [results,setResults] = useState([]);
+    const [cards,setCards] = useState([]);
     const [team1,setTeam1] = useState([]);
     const [team2,setTeam2] = useState([]);
 
@@ -30,7 +30,9 @@ export default function History(props) {
 
                     let date = new Date(match.gameStartTimestamp);
                     date = date.toString().split(" GMT")[0];
-                    
+                    let time = date.substring(16);
+                    date = toDateTime(date);
+
                     const duration = Math.floor(match.gameDuration / 60) + "min " + (match.gameDuration % 60 === 0 ? "" : (match.gameDuration % 60) + "s" );
 
                     let mode;
@@ -69,39 +71,62 @@ export default function History(props) {
                         for(let j in players) {
                             if(players[j].summonerId === info.id) {
                                 player = players[j];
-                                // + add bold name
                                 teams[player.teamId].push(
-                                    <div>
-                                        <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + players[j].champion.id + ".png"} alt={players[j].champion.name + "'s image"} />
-                                        <p><strong>{players[j].summonerName}</strong></p>
+                                    <div key={players[j].summonerId} className="flex flex-row align-middle my-1">
+                                        <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + players[j].champion.id + ".png"} alt={players[j].champion.name + "'s image"} className="rounded-full w-[25px] h-[25px]"/>
+                                        <p className="text-sm text-gray-300 pt-1 ml-2"><strong>{players[j].summonerName}</strong></p>
                                     </div>
                                 );
                             }
                             else {
-                                // add others
                                 teams[players[j].teamId].push(
-                                    <div>
-                                        <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + players[j].champion.id + ".png"} alt={players[j].champion.name + "'s image"} />
-                                        <p>{players[j].summonerName}</p>
+                                    <div key={players[j].summonerId} className="flex flex-row align-middle my-1">
+                                        <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + players[j].champion.id + ".png"} alt={players[j].champion.name + "'s image"} className="rounded-md w-[25px] h-[25px]"/>
+                                        <p className="text-sm text-gray-300 pt-1 ml-2">{players[j].summonerName}</p>
                                     </div>
                                 );
                             }
                         }
-                        setTeam1(teams[100]);
-                        setTeam2(teams[200]);
+                        let color;
+                        if(player.win) color = "backdrop-hue-rotate-90 bg-green-600/30";
+                        else color = "backdrop-hue-rotate-180 bg-red-600/30";
                         console.log(teams);
+                        console.log(player);
+
+                        matches[i] = (
+                            <div key={match.gameId} className={"flex flex-row justify-between rounded-md px-5 py-3 my-2 " + color}>
+                                <div className="flex flex-col justify-between">
+                                    <div>
+                                        <p>{mode}</p>
+                                    </div>
+                                    
+                                    <p>{duration}</p>
+                                    <div>
+                                        <p>{date}</p>
+                                        <p>{time}</p>
+                                    </div>
+                                </div>
+                                <div>
+
+                                </div>
+                                <div className="flex flex-row">
+                                    <div className="min-w-[150px]">
+                                        {teams[100]}
+                                    </div>
+                                    <div className="min-w-[150px]">
+                                        {teams[200]}
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                        setCards(matches);
                     })
                     .catch((err) => console.log(err));
-                    
-                    
-                    
-
-
                 })
                 .catch((err) => console.log(err));
-            },110);
+            },120);
         }
-
+        
 
         setTimeout(() => {
             setLoaded(true);
@@ -110,14 +135,7 @@ export default function History(props) {
 
     function render() {
         return(
-            <div className="flex flex-row">
-                <div>
-                    {team1}
-                </div>
-                <div>
-                    {team2}
-                </div>
-            </div>
+            cards
         )
     }
 
