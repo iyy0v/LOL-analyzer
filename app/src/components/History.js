@@ -94,20 +94,23 @@ export default function History(props) {
                             }
                         }
                         let color;
-                        if(player.win) color = "backdrop-hue-rotate-90 bg-green-600/30";
-                        else color = "backdrop-hue-rotate-180 bg-red-600/30";
+                        if(player.teamEarlySurrendered) color = "backdrop-hue-rotate-90 bg-gray-800/80";
+                        else {
+                            if(player.win) color = "backdrop-hue-rotate-90 bg-green-600/30";
+                            else color = "backdrop-hue-rotate-180 bg-red-600/30";
+                        }
                         console.log(teams);
                         console.log(player);
 
                         matches[i] = (
                             <div key={match.gameId} className={"flex flex-row justify-between rounded-md px-5 py-3 my-2 " + color}>
                                 <div className="flex flex-col justify-between">
-                                    <div>
-                                        <p>{mode}</p>
+                                    <div className="py-2 border-b border-slate-50/20">
+                                        <p className="font-semibold">{mode}</p>
                                     </div>
                                     
                                     <p>{duration}</p>
-                                    <div>
+                                    <div className="border-t border-slate-50/20">
                                         <p>{date}</p>
                                         <p>{time}</p>
                                     </div>
@@ -118,10 +121,10 @@ export default function History(props) {
                                     </div>
                                 </div>
                                 <div className="flex flex-row">
-                                    <div className="min-w-[150px]">
+                                    <div className="min-w-[170px]">
                                         {teams[100]}
                                     </div>
-                                    <div className="min-w-[150px]">
+                                    <div className="min-w-[170px]">
                                         {teams[200]}
                                     </div>
                                 </div>
@@ -148,7 +151,7 @@ export default function History(props) {
     }
 
     useEffect(() => {
-        setup();
+        if(!loaded) setup();
     },[]);
 
     return(
