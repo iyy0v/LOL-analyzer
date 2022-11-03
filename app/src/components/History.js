@@ -73,7 +73,10 @@ export default function History(props) {
                                 player = players[j];
                                 teams[player.teamId].push(
                                     <div key={players[j].summonerId} className="flex flex-row align-middle my-1">
-                                        <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + players[j].champion.id + ".png"} alt={players[j].champion.name + "'s image"} className="rounded-full w-[25px] h-[25px]"/>
+                                        <div className="champImg min-h-max">
+                                            <span className="tooltip">{players[j].champion.name}</span>
+                                            <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + players[j].champion.id + ".png"} alt={players[j].champion.name + "'s image"} className="rounded-md w-[25px] h-[25px]"/>
+                                        </div>
                                         <p className="text-sm text-gray-300 pt-1 ml-2"><strong>{players[j].summonerName}</strong></p>
                                     </div>
                                 );
@@ -81,7 +84,10 @@ export default function History(props) {
                             else {
                                 teams[players[j].teamId].push(
                                     <div key={players[j].summonerId} className="flex flex-row align-middle my-1">
-                                        <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + players[j].champion.id + ".png"} alt={players[j].champion.name + "'s image"} className="rounded-md w-[25px] h-[25px]"/>
+                                        <div className="champImg min-h-max">
+                                            <span className="tooltip">{players[j].champion.name}</span>
+                                            <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + players[j].champion.id + ".png"} alt={players[j].champion.name + "'s image"} className="rounded-md w-[25px] h-[25px]"/>
+                                        </div>
                                         <p className="text-sm text-gray-300 pt-1 ml-2">{players[j].summonerName}</p>
                                     </div>
                                 );
@@ -107,7 +113,9 @@ export default function History(props) {
                                     </div>
                                 </div>
                                 <div>
-
+                                    <div>
+                                        
+                                    </div>
                                 </div>
                                 <div className="flex flex-row">
                                     <div className="min-w-[150px]">
