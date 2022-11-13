@@ -5,8 +5,6 @@ import { getRegionName2, joinChampions, toDateTime } from "../scripts";
 export default function History(props) {
     const [loaded,setLoaded] = useState(false);
     const [cards,setCards] = useState([]);
-    const [team1,setTeam1] = useState([]);
-    const [team2,setTeam2] = useState([]);
 
     const patch = props.props.patch;
     const info = props.props.info;
@@ -18,6 +16,8 @@ export default function History(props) {
         let regionName = getRegionName2(region);
 
         console.log(matches);
+        setTimeout(() => {
+
         for(let i in matches) {
             setTimeout(() => {
                 axios({
@@ -135,24 +135,25 @@ export default function History(props) {
                     .catch((err) => console.log(err));
                 })
                 .catch((err) => console.log(err));
-            },120);
+            },200);
         }
         
 
         setTimeout(() => {
             setLoaded(true);
         },3000);
+        
+        },4000);
     }
 
     function render() {
-        return(
-            cards
-        )
+            return(
+                cards
+            )
     }
-
     useEffect(() => {
         if(!loaded) setup();
-    },[]);
+    },[loaded]);
 
     return(
         <div id="history" className="p-4 mt-4 rounded shadow-md backdrop-brightness-90">

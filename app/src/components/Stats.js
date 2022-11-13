@@ -69,7 +69,7 @@ export default function Stats(props) {
                         if(result) wins++;
                         setNormalW(wins);
                     });
-                },i*110);
+                },i*200);
             }
         })
         .catch((err) => console.log(err));
@@ -117,11 +117,8 @@ export default function Stats(props) {
                     lanes[result]++;
                     setLanes(lanes);
                 });
-            },i*110);
+            },i*200);
         }
-
-        
-        
         setTimeout(() =>{setLoaded(true)},3000);
     }
     
