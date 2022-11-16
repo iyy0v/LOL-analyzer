@@ -26,7 +26,6 @@ export default function History(props) {
                 })
                 .then((res) => { // Set Match result
                     const match = res.data.info;
-                    console.log(match);
 
                     let date = new Date(match.gameStartTimestamp);
                     date = date.toString().split(" GMT")[0];
@@ -59,7 +58,6 @@ export default function History(props) {
                             mode = "Others"
                             break;
                     }
-                    console.log(mode);
 
                     let player;
                     const teams = {100:[],200:[]};
@@ -67,7 +65,6 @@ export default function History(props) {
                     fetch('http://ddragon.leagueoflegends.com/cdn/' + patch + '/data/en_US/champion.json')
                     .then(res2 => res2.json()).then(champs => {
                         const players = joinChampions(match.participants,champs);
-                        console.log(players);
                         for(let j in players) {
                             if(players[j].summonerId === info.id) {
                                 player = players[j];
@@ -99,8 +96,11 @@ export default function History(props) {
                             if(player.win) color = "backdrop-hue-rotate-90 bg-green-600/30";
                             else color = "backdrop-hue-rotate-180 bg-red-600/30";
                         }
-                        console.log(teams);
                         console.log(player);
+                        const KDA = ((player.kills + player.assists) / player.deaths).toFixed(1);
+                        const CScore = player.totalMinionsKilled + player.neutralMinionsKilled;
+                        const CSPM = (CScore*60 / player.timePlayed).toFixed(1);
+                        const VScore = player.visionScore;
 
                         matches[i] = (
                             <div key={match.gameId} className={"flex flex-row justify-between rounded-md px-5 py-3 my-2 " + color}>
@@ -108,7 +108,6 @@ export default function History(props) {
                                     <div className="py-2 border-b border-slate-50/20">
                                         <p className="font-semibold">{mode}</p>
                                     </div>
-                                    
                                     <p>{duration}</p>
                                     <div className="border-t border-slate-50/20">
                                         <p>{date}</p>
@@ -116,8 +115,26 @@ export default function History(props) {
                                     </div>
                                 </div>
                                 <div>
-                                    <div>
-                                        
+                                    <div className="flex flex-row">
+                                        <div className="flex flex-col">
+                                            <div>
+                                                <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + player.champion.id + ".png"} alt={player.champion.name + " image"} className="w-[60px] h-[60px] rounded-md"/>
+                                                <p className="text-sm w-min px-1 relative top-[-20px] right-[-18px] mx-auto rounded bg-slate-900 ">{player.champLevel}</p>
+                                            </div>
+                                            <div>
+
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p className="text-lg font-bold inline">{player.kills}</p>
+                                            <p className="text-lg text-slate-50/20 inline"> / </p>
+                                            <p className="text-lg text-red-600 font-bold inline">{player.deaths}</p>
+                                            <p className="text-lg text-slate-50/20 inline"> / </p>
+                                            <p className="text-lg font-bold inline">{player.assists}</p>
+                                            <p className="text-slate-50/80">{KDA + ":1 KDA"}</p>
+                                            <p className="text-slate-50/80">{"CS " + CScore + " (" + CSPM + ")"}</p>
+                                            <p className="text-slate-50/80">{"Vision Score : " + VScore}</p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="flex flex-row">
