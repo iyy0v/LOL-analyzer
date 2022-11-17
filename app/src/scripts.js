@@ -154,6 +154,24 @@ export function joinChampions(res1,champs) {
     return res1;
 }
 
+export function joinSpells(spells,player) {
+    spells = spells.data;
+    player.spells = [];
+    for(let i in spells) {
+        if(spells[i].key == player.summoner1Id) {
+            player.spells[0] =  spells[i];
+            break;
+        } 
+    }
+    for(let i in spells) {
+        if(spells[i].key == player.summoner12Id) {
+            player.spells[1] =  spells[i];
+            break;
+        } 
+    }
+    return player;
+}
+
 export function getResult(puuid,match) {
     const players = match.data.info.participants;
     for(let i in players) {

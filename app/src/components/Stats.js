@@ -132,7 +132,7 @@ export default function Stats(props) {
                     <Doughnut className='ratio' data={normalData} />
                     <p className='relative top-[-38%] right-[-38%] w-fit text-green-300'>W: {Math.round(normalW*100 / 20)}%</p>
                     <p className='relative top-[-38%] right-[-38%] w-fit text-red-300'>L : {Math.round((20-normalW)*100 / 20)}%</p>
-                    <p className="text-center text-sm text-gray-500 relative bottom-8">Last 20 matches played</p>
+                    <p className="text-center text-sm text-gray-500 relative bottom-8">Recent 20 Games Played</p>
                 </div>
                 <div id="soloRatio" className='min-h-max min-w-[200px]'>
                     <h2 className="text-xl text-center my-2">Ranked Solo</h2>
@@ -164,7 +164,7 @@ export default function Stats(props) {
             <div id="lanes">
                 <h2 className="text-2xl text-center mt-5">Lanes</h2>
                 <Radar data={lanesData} options={lanesOptions} className="radar mx-auto"/>
-                <p className="text-center text-sm text-gray-500 relative bottom-8">Last 20 matches played</p>
+                <p className="text-center text-sm text-gray-500 relative bottom-8">Recent 20 Games Played</p>
             </div>
         </>);
         }
