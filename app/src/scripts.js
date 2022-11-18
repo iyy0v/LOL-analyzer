@@ -164,7 +164,7 @@ export function joinSpells(spells,player) {
         } 
     }
     for(let i in spells) {
-        if(spells[i].key == player.summoner12Id) {
+        if(spells[i].key == player.summoner2Id) {
             player.spells[1] =  spells[i];
             break;
         } 

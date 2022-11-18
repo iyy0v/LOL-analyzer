@@ -85,7 +85,7 @@ export default function History(props) {
                                             <span className="tooltip">{players[j].champion.name}</span>
                                             <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + players[j].champion.id + ".png"} alt={players[j].champion.name + "'s image"} className="rounded-md w-[25px] h-[25px]"/>
                                         </div>
-                                        <p className="text-sm text-gray-300 pt-1 ml-2">{players[j].summonerName}</p>
+                                        <p className="text-sm text-gray-300/80 pt-1 ml-2">{players[j].summonerName}</p>
                                     </div>
                                 );
                             }
@@ -119,10 +119,19 @@ export default function History(props) {
                                     </div>
                                     <div>
                                         <div className="flex flex-row">
-                                            <div className="flex flex-col">
-                                                <div>
-                                                    <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + player.champion.id + ".png"} alt={player.champion.name + " image"} className="w-[60px] h-[60px] rounded-md"/>
-                                                    <p className="text-sm w-min px-1 relative top-[-20px] right-[-18px] mx-auto rounded bg-slate-900 ">{player.champLevel}</p>
+                                            <div className="flex flex-col pr-3 mr-3 border-r border-slate-50/20">
+                                                <div className="flex flex-row">
+                                                    <div className="mr-3">
+                                                        <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + player.champion.id + ".png"} alt={player.champion.name + " image"} className="w-[64px] h-[64px] rounded-md"/>
+                                                        <p className="text-sm w-min px-1 relative top-[-20px] right-[-18px] mx-auto rounded bg-slate-900 ">{player.champLevel}</p>
+                                                    </div>
+                                                    <div className="mr-3">
+                                                        <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch +"/img/spell/" + player.spells[0].image.full} alt={player.spells[0].id + " image"} className="w-[30px] h-[30px] rounded-md mb-1" />
+                                                        <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch +"/img/spell/" + player.spells[1].image.full} alt={player.spells[1].id + " image"} className="w-[30px] h-[30px] rounded-md" />
+                                                    </div>
+                                                    <div>
+
+                                                    </div>
                                                 </div>
                                                 <div>
 
@@ -131,7 +140,7 @@ export default function History(props) {
                                             <div>
                                                 <p className="text-lg font-bold inline">{player.kills}</p>
                                                 <p className="text-lg text-slate-50/20 inline"> / </p>
-                                                <p className="text-lg text-red-600 font-bold inline">{player.deaths}</p>
+                                                <p className="text-lg text-red-500 font-bold inline">{player.deaths}</p>
                                                 <p className="text-lg text-slate-50/20 inline"> / </p>
                                                 <p className="text-lg font-bold inline">{player.assists}</p>
                                                 <p className="text-slate-50/80">{KDA + ":1 KDA"}</p>
