@@ -70,7 +70,7 @@ export default function History(props) {
                                 player = players[j];
                                 teams[player.teamId].push(
                                     <div key={players[j].summonerId} className="flex flex-row align-middle my-1">
-                                        <div className="champImg min-h-max">
+                                        <div className="imgTooltip inline-block min-h-max">
                                             <span className="tooltip">{players[j].champion.name}</span>
                                             <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + players[j].champion.id + ".png"} alt={players[j].champion.name + "'s image"} className="rounded-md w-[25px] h-[25px]"/>
                                         </div>
@@ -81,7 +81,7 @@ export default function History(props) {
                             else {
                                 teams[players[j].teamId].push(
                                     <div key={players[j].summonerId} className="flex flex-row align-middle my-1">
-                                        <div className="champImg min-h-max">
+                                        <div className="imgTooltip inline-block min-h-max">
                                             <span className="tooltip">{players[j].champion.name}</span>
                                             <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + players[j].champion.id + ".png"} alt={players[j].champion.name + "'s image"} className="rounded-md w-[25px] h-[25px]"/>
                                         </div>
@@ -126,8 +126,14 @@ export default function History(props) {
                                                         <p className="text-sm w-min px-1 relative top-[-20px] right-[-18px] mx-auto rounded bg-slate-900 ">{player.champLevel}</p>
                                                     </div>
                                                     <div className="mr-3">
-                                                        <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch +"/img/spell/" + player.spells[0].image.full} alt={player.spells[0].id + " image"} className="w-[30px] h-[30px] rounded-md mb-1" />
-                                                        <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch +"/img/spell/" + player.spells[1].image.full} alt={player.spells[1].id + " image"} className="w-[30px] h-[30px] rounded-md" />
+                                                        <div className="imgTooltip block">
+                                                            <span className="tooltip">{player.spells[0].name}</span>
+                                                            <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch +"/img/spell/" + player.spells[0].image.full} alt={player.spells[0].name + " image"} className="w-[30px] h-[30px] rounded-md mb-1" />
+                                                        </div>
+                                                        <div className="imgTooltip block">
+                                                            <span className="tooltip">{player.spells[1].name}</span>
+                                                            <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch +"/img/spell/" + player.spells[1].image.full} alt={player.spells[1].name + " image"} className="w-[30px] h-[30px] rounded-md" />
+                                                        </div>
                                                     </div>
                                                     <div>
 

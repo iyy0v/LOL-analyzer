@@ -55,9 +55,8 @@ body {
         'opsz' 48
 
 }
-.champImg {
+.imgTooltip {
     position: relative;
-    display: inline-block;
 }
 .tooltip {
     visibility: hidden;
@@ -71,6 +70,6 @@ body {
     position: absolute;
     z-index: 1;
 }
-.champImg:hover .tooltip {
+.imgTooltip:hover .tooltip {
     visibility: visible;
 }
