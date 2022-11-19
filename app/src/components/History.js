@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { getRegionName2, joinChampions, joinSpells, toDateTime } from "../scripts";
+import { getRegionName2, joinChampions, joinRunes, joinSpells, toDateTime } from "../scripts";
 
 export default function History(props) {
     const [loaded,setLoaded] = useState(false);
@@ -93,46 +93,55 @@ export default function History(props) {
                         fetch('http://ddragon.leagueoflegends.com/cdn/' + patch + '/data/en_US/summoner.json')
                         .then(res3 => res3.json()).then(spells => { // add spells info to the player
                             player = joinSpells(spells,player);
-                            let color;
-                            if(player.teamEarlySurrendered) color = "backdrop-hue-rotate-90 bg-gray-800/80";
-                            else {
-                                if(player.win) color = "backdrop-hue-rotate-90 bg-green-600/30";
-                                else color = "backdrop-hue-rotate-180 bg-red-600/30";
-                            }
-                            console.log(player);
-                            const KDA = ((player.kills + player.assists) / player.deaths).toFixed(1);
-                            const CScore = player.totalMinionsKilled + player.neutralMinionsKilled;
-                            const CSPM = (CScore*60 / player.timePlayed).toFixed(1);
-                            const VScore = player.visionScore;
+                            
+                            fetch('http://ddragon.leagueoflegends.com/cdn/' + patch +'/data/en_US/runesReforged.json')
+                            .then(res4 => res4.json()).then(runes => { // add runes info to player
+                                console.log(runes);
+                                player = joinRunes(runes,player);
+                                let color;
+                                if(player.teamEarlySurrendered) color = "backdrop-hue-rotate-90 bg-gray-800/80";
+                                else {
+                                    if(player.win) color = "backdrop-hue-rotate-90 bg-green-600/30";
+                                    else color = "backdrop-hue-rotate-180 bg-red-600/30";
+                                }
+                                console.log(player);
+                                const KDA = ((player.kills + player.assists) / player.deaths).toFixed(1);
+                                const CScore = player.totalMinionsKilled + player.neutralMinionsKilled;
+                                const CSPM = (CScore*60 / player.timePlayed).toFixed(1);
+                                const VScore = player.visionScore;
 
-                            matches[i] = (
-                                <div key={match.gameId} className={"flex flex-row justify-between rounded-md px-5 py-3 my-2 " + color}>
-                                    <div className="flex flex-col justify-between">
-                                        <div className="py-2 border-b border-slate-50/20">
-                                            <p className="font-semibold">{mode}</p>
+                                matches[i] = (
+                                    <div key={match.gameId} className={"flex flex-row justify-between rounded-md px-5 py-3 my-2 " + color}>
+                                        <div className="flex flex-col justify-between">
+                                            <div className="py-2 border-b border-slate-50/20">
+                                                <p className="font-semibold">{mode}</p>
+                                            </div>
+                                            <p>{duration}</p>
+                                            <div className="border-t border-slate-50/20">
+                                                <p>{date}</p>
+                                                <p>{time}</p>
+                                            </div>
                                         </div>
-                                        <p>{duration}</p>
-                                        <div className="border-t border-slate-50/20">
-                                            <p>{date}</p>
-                                            <p>{time}</p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="flex flex-row">
-                                            <div className="flex flex-col pr-3 mr-3 border-r border-slate-50/20">
-                                                <div className="flex flex-row">
-                                                    <div className="mr-3">
-                                                        <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + player.champion.id + ".png"} alt={player.champion.name + " image"} className="w-[64px] h-[64px] rounded-md"/>
-                                                        <p className="text-sm w-min px-1 relative top-[-20px] right-[-18px] mx-auto rounded bg-slate-900 ">{player.champLevel}</p>
-                                                    </div>
-                                                    <div className="mr-3">
-                                                        <div className="imgTooltip block">
-                                                            <span className="tooltip">{player.spells[0].name}</span>
-                                                            <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch +"/img/spell/" + player.spells[0].image.full} alt={player.spells[0].name + " image"} className="w-[30px] h-[30px] rounded-md mb-1" />
+                                        <div>
+                                            <div className="flex flex-row">
+                                                <div className="flex flex-col pr-3 mr-3 border-r border-slate-50/20">
+                                                    <div className="flex flex-row">
+                                                        <div className="mr-3">
+                                                            <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + player.champion.id + ".png"} alt={player.champion.name + " image"} className="w-[64px] h-[64px] rounded-md"/>
+                                                            <p className="text-sm w-min px-1 relative top-[-20px] right-[-18px] mx-auto rounded bg-slate-900 ">{player.champLevel}</p>
                                                         </div>
-                                                        <div className="imgTooltip block">
-                                                            <span className="tooltip">{player.spells[1].name}</span>
-                                                            <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch +"/img/spell/" + player.spells[1].image.full} alt={player.spells[1].name + " image"} className="w-[30px] h-[30px] rounded-md" />
+                                                        <div className="mr-3">
+                                                            <div className="imgTooltip block">
+                                                                <span className="tooltip">{player.spells[0].name}</span>
+                                                                <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch +"/img/spell/" + player.spells[0].image.full} alt={player.spells[0].name + " image"} className="w-[30px] h-[30px] rounded-md mb-1" />
+                                                            </div>
+                                                            <div className="imgTooltip block">
+                                                                <span className="tooltip">{player.spells[1].name}</span>
+                                                                <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch +"/img/spell/" + player.spells[1].image.full} alt={player.spells[1].name + " image"} className="w-[30px] h-[30px] rounded-md" />
+                                                            </div>
+                                                        </div>
+                                                        <div>
+
                                                         </div>
                                                     </div>
                                                     <div>
@@ -140,32 +149,30 @@ export default function History(props) {
                                                     </div>
                                                 </div>
                                                 <div>
-
+                                                    <p className="text-lg font-bold inline">{player.kills}</p>
+                                                    <p className="text-lg text-slate-50/20 inline"> / </p>
+                                                    <p className="text-lg text-red-500 font-bold inline">{player.deaths}</p>
+                                                    <p className="text-lg text-slate-50/20 inline"> / </p>
+                                                    <p className="text-lg font-bold inline">{player.assists}</p>
+                                                    <p className="text-slate-50/80">{KDA + ":1 KDA"}</p>
+                                                    <p className="text-slate-50/80">{"CS " + CScore + " (" + CSPM + ")"}</p>
+                                                    <p className="text-slate-50/80">{"Vision Score : " + VScore}</p>
                                                 </div>
                                             </div>
-                                            <div>
-                                                <p className="text-lg font-bold inline">{player.kills}</p>
-                                                <p className="text-lg text-slate-50/20 inline"> / </p>
-                                                <p className="text-lg text-red-500 font-bold inline">{player.deaths}</p>
-                                                <p className="text-lg text-slate-50/20 inline"> / </p>
-                                                <p className="text-lg font-bold inline">{player.assists}</p>
-                                                <p className="text-slate-50/80">{KDA + ":1 KDA"}</p>
-                                                <p className="text-slate-50/80">{"CS " + CScore + " (" + CSPM + ")"}</p>
-                                                <p className="text-slate-50/80">{"Vision Score : " + VScore}</p>
+                                        </div>
+                                        <div className="flex flex-row">
+                                            <div className="min-w-[170px]">
+                                                {teams[100]}
+                                            </div>
+                                            <div className="min-w-[170px]">
+                                                {teams[200]}
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="flex flex-row">
-                                        <div className="min-w-[170px]">
-                                            {teams[100]}
-                                        </div>
-                                        <div className="min-w-[170px]">
-                                            {teams[200]}
-                                        </div>
-                                    </div>
-                                </div>
-                            );
-                            setCards(matches);
+                                );
+                                setCards(matches);
+                            })
+                            .catch((err) => console.log(err));
                         })
                         .catch((err) => console.log(err));
                     })

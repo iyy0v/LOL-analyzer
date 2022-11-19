@@ -172,6 +172,27 @@ export function joinSpells(spells,player) {
     return player;
 }
 
+export function joinRunes(runes,player) {
+    player.runes = [];
+    let style;
+    for(let i in player.perks.styles) {
+        style = player.perks.styles[i];
+        player.runes[i] = [];
+        for(let j in style.selections) {
+            for(let h in runes) {
+                for(let k in runes[h].slots) {
+                    for(let l in runes[h].slots[k].runes) {
+                        if(style.selections[j].perk === runes[h].slots[k].runes[l].id) {
+                            player.runes[i].push(runes[h].slots[k].runes[l]);
+                        }
+                    }
+                } 
+            }
+        }
+    }
+    return player;
+}
+
 export function getResult(puuid,match) {
     const players = match.data.info.participants;
     for(let i in players) {
