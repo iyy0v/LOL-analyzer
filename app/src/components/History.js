@@ -96,7 +96,6 @@ export default function History(props) {
                             
                             fetch('http://ddragon.leagueoflegends.com/cdn/' + patch +'/data/en_US/runesReforged.json')
                             .then(res4 => res4.json()).then(runes => { // add runes info to player
-                                console.log(runes);
                                 player = joinRunes(runes,player);
                                 let color;
                                 if(player.teamEarlySurrendered) color = "backdrop-hue-rotate-90 bg-gray-800/80";
