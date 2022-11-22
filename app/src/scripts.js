@@ -193,6 +193,19 @@ export function joinRunes(runes,player) {
     return player;
 }
 
+export function joinItems(items,player) {
+    items = items.data;
+    player.items = [];
+    player.items[0] = items[player.item0];
+    player.items[1] = items[player.item1];
+    player.items[2] = items[player.item2];
+    player.items[3] = items[player.item3];
+    player.items[4] = items[player.item4];
+    player.items[5] = items[player.item5];
+    player.items[6] = items[player.item6];
+    return player;
+}
+
 export function getResult(puuid,match) {
     const players = match.data.info.participants;
     for(let i in players) {
