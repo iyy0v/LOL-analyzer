@@ -101,6 +101,7 @@ export default function History(props) {
                                 fetch('http://ddragon.leagueoflegends.com/cdn/' + patch +'/data/en_US/item.json')
                                 .then(res4 => res4.json()).then(items => { // add items info to player
                                     player = joinItems(items,player);
+                                    console.log(player.items);
                                     const itemsElements = player.items.map((item,i) => (
                                         item === undefined
                                         ?
@@ -111,11 +112,14 @@ export default function History(props) {
                                             <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/item/" + item.image.full} alt={item.name + " icon"} className="w-[30px] h-[30px] rounded" />
                                         </div>
                                     ));
-                                    itemsElements[6] =  <div key={6} className="imgTooltip block h-min">
+                                    itemsElements[6] =  player.items[6] === undefined
+                                                        ?
+                                                        <div key="6" className="block shadow-sm backdrop-brightness-90 w-[30px] h-[30px] rounded"></div>
+                                                        :
+                                                        <div key="6" className="imgTooltip block h-min">
                                                             <span className="tooltip">{player.items[6].name}</span>
                                                             <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/item/" + player.items[6].image.full} alt={player.items[6].name + " icon"} className="w-[30px] h-[30px] ml-2 rounded-full" />
                                                         </div>;
-                                    console.log(itemsElements);
 
                                     let color;
                                     if(player.teamEarlySurrendered) color = "backdrop-hue-rotate-90 bg-gray-800/80";
@@ -131,7 +135,7 @@ export default function History(props) {
 
                                     matches[i] = (
                                         <div key={match.gameId} className={"flex flex-row justify-between rounded-md px-5 py-3 my-2 min-w-fit " + color}>
-                                            <div className="flex flex-col justify-between min-w-fit">
+                                            <div key="gameInfo" className="flex flex-col justify-between min-w-fit">
                                                 <div className="py-2 border-b border-slate-50/20">
                                                     <p className="font-semibold">{mode}</p>
                                                 </div>
@@ -141,65 +145,65 @@ export default function History(props) {
                                                     <p>{time}</p>
                                                 </div>
                                             </div>
-                                            <div>
+                                            <div key="playerStats">
                                                 <div className="flex flex-row min-w-fit">
                                                     <div className="flex flex-col pr-3 mr-3 min-w-fit border-r border-slate-50/20">
-                                                        <div className="flex flex-row min-w-fit">
-                                                            <div className="mr-3 min-w-fit">
+                                                        <div key="runes and spells" className="flex flex-row min-w-fit">
+                                                            <div key="champ" className="mr-3 min-w-fit">
                                                                 <div className="imgTooltip block">
                                                                     <span className="tooltip">{player.champion.name}</span>
                                                                     <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + player.champion.id + ".png"} alt={player.champion.name + " image"} className="w-[64px] h-[64px] rounded-md"/>
                                                                 </div>
                                                                 <p className="text-sm w-min px-1 relative top-[-20px] right-[-18px] mx-auto rounded bg-slate-900 ">{player.champLevel}</p>
                                                             </div>
-                                                            <div className="mr-3 min-w-fit">
-                                                                <div className="imgTooltip block">
+                                                            <div key="spells" className="mr-3 min-w-fit">
+                                                                <div key={player.spells[0].name} className="imgTooltip block">
                                                                     <span className="tooltip">{player.spells[0].name}</span>
                                                                     <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch +"/img/spell/" + player.spells[0].image.full} alt={player.spells[0].name + " image"} className="w-[30px] h-[30px] rounded-md mb-1 block" />
                                                                 </div>
-                                                                <div className="imgTooltip block">
+                                                                <div key={player.spells[1].name} className="imgTooltip block">
                                                                     <span className="tooltip">{player.spells[1].name}</span>
                                                                     <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch +"/img/spell/" + player.spells[1].image.full} alt={player.spells[1].name + " image"} className="w-[30px] h-[30px] rounded-md block" />
                                                                 </div>
                                                             </div>
-                                                            <div className="min-w-fit">
+                                                            <div key="mainRune" className="min-w-fit">
                                                                 <div className="imgTooltip block">
                                                                     <span className="tooltip">{player.runes[0][0].name}</span>
                                                                     <img src={"https://ddragon.canisback.com/img/" + player.runes[0][0].icon} alt={player.runes[0][0].name + " icon"} className="w-[40px] h-[40px] rounded-full" />
                                                                 </div>
                                                             </div>
-                                                            <div className="min-w-fit">
-                                                                <div className="grid grid-cols-3 gap-1 content-center h-[40px] min-w-fit">
-                                                                    <div className="imgTooltip block h-min">
+                                                            <div key="runes" className="min-w-fit">
+                                                                <div key="primaryRunes" className="grid grid-cols-3 gap-1 content-center h-[40px] min-w-fit">
+                                                                    <div key={player.runes[0][1].name} className="imgTooltip block h-min">
                                                                         <span className="tooltip">{player.runes[0][1].name}</span>
                                                                         <img src={"https://ddragon.canisback.com/img/" + player.runes[0][1].icon} alt={player.runes[0][1].name + " icon"} className="w-[25px] h-[25px] rounded-full" />
                                                                     </div>
-                                                                    <div className="imgTooltip block h-min">
+                                                                    <div key={player.runes[0][2].name} className="imgTooltip block h-min">
                                                                         <span className="tooltip">{player.runes[0][2].name}</span>
                                                                         <img src={"https://ddragon.canisback.com/img/" + player.runes[0][2].icon} alt={player.runes[0][2].name + " icon"} className="w-[25px] h-[25px] rounded-full" />
                                                                     </div>
-                                                                    <div className="imgTooltip block h-min">
+                                                                    <div key={player.runes[0][3].name} className="imgTooltip block h-min">
                                                                         <span className="tooltip">{player.runes[0][3].name}</span>
                                                                         <img src={"https://ddragon.canisback.com/img/" + player.runes[0][3].icon} alt={player.runes[0][3].name + " icon"} className="w-[25px] h-[25px] rounded-full" />
                                                                     </div>
                                                                 </div>
-                                                                <div className="grid grid-cols-3 gap-1 h-[30px] min-w-fit">
-                                                                    <div className="imgTooltip block h-min">
+                                                                <div key="secondaryRunes" className="grid grid-cols-3 gap-1 h-[30px] min-w-fit">
+                                                                    <div key={player.runes[1][0].name} className="imgTooltip block h-min">
                                                                         <span className="tooltip">{player.runes[1][0].name}</span>
                                                                         <img src={"https://ddragon.canisback.com/img/" + player.runes[1][0].icon} alt={player.runes[1][0].name + " icon"} className="w-[25px] h-[25px] rounded-full" />
                                                                     </div>
-                                                                    <div className="imgTooltip block h-min">
+                                                                    <div key={player.runes[1][1].name} className="imgTooltip block h-min">
                                                                         <span className="tooltip">{player.runes[1][1].name}</span>
                                                                         <img src={"https://ddragon.canisback.com/img/" + player.runes[1][1].icon} alt={player.runes[1][1].name + " icon"} className="w-[25px] h-[25px] rounded-full" />
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div className="flex flex-row gap-1 min-w-fit mt-3">
+                                                        <div key="items" className="flex flex-row gap-1 min-w-fit mt-3">
                                                             { itemsElements }
                                                         </div>
                                                     </div>
-                                                    <div className="min-w-fit">
+                                                    <div key="kda" className="min-w-fit">
                                                         <p className="text-lg font-bold inline">{player.kills}</p>
                                                         <p className="text-lg text-slate-50/20 inline"> / </p>
                                                         <p className="text-lg text-red-500 font-bold inline">{player.deaths}</p>
@@ -211,11 +215,11 @@ export default function History(props) {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="flex flex-row">
-                                                <div className="min-w-[170px]">
+                                            <div key="players" className="flex flex-row">
+                                                <div key="team1" className="min-w-[170px]">
                                                     {teams[100]}
                                                 </div>
-                                                <div className="min-w-[170px]">
+                                                <div key="team2" className="min-w-[170px]">
                                                     {teams[200]}
                                                 </div>
                                             </div>
