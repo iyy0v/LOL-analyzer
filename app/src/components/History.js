@@ -195,7 +195,7 @@ export default function History(props) {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div className="flex flex-row gap-1 min-w-fit">
+                                                        <div className="flex flex-row gap-1 min-w-fit mt-3">
                                                             { itemsElements }
                                                         </div>
                                                     </div>
