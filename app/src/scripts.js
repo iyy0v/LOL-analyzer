@@ -206,6 +206,18 @@ export function joinItems(items,player) {
     return player;
 }
 
+export function getMulti(player) {
+    console.log(player.pentaKills + " " + player.quadraKills + " " + player.tripleKills);
+    if(player.pentaKills > 1) return player.pentaKills + "x PentaKill";
+    if(player.pentaKills > 0) return "PentaKill";
+    if(player.quadraKills > 1) return player.quadraKills + "x QuadraKill";
+    if(player.quadraKills > 0) return "QuadraKill";
+    if(player.tripleKills > 1) return player.tripleKills + "x TripleKill";
+    if(player.tripleKills > 0) return "TripleKill";
+    return false;
+
+}
+
 export function getResult(puuid,match) {
     const players = match.data.info.participants;
     for(let i in players) {

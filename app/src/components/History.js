@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { getRegionName2, joinChampions, joinItems, joinRunes, joinSpells, toDateTime } from "../scripts";
+import { getMulti, getRegionName2, joinChampions, joinItems, joinRunes, joinSpells, toDateTime } from "../scripts";
 
 export default function History(props) {
     const [loaded,setLoaded] = useState(false);
@@ -101,7 +101,6 @@ export default function History(props) {
                                 fetch('http://ddragon.leagueoflegends.com/cdn/' + patch +'/data/en_US/item.json')
                                 .then(res4 => res4.json()).then(items => { // add items info to player
                                     player = joinItems(items,player);
-                                    console.log(player.items);
                                     const itemsElements = player.items.map((item,i) => (
                                         item === undefined
                                         ?
@@ -132,6 +131,8 @@ export default function History(props) {
                                     const CScore = player.totalMinionsKilled + player.neutralMinionsKilled;
                                     const CSPM = (CScore*60 / player.timePlayed).toFixed(1);
                                     const VScore = player.visionScore;
+
+                                    const multiKills = getMulti(player);
 
                                     matches[i] = (
                                         <div key={match.gameId} className={"flex flex-row justify-between rounded-md px-5 py-3 my-2 min-w-fit " + color}>
@@ -203,15 +204,25 @@ export default function History(props) {
                                                             { itemsElements }
                                                         </div>
                                                     </div>
-                                                    <div key="kda" className="min-w-fit">
-                                                        <p className="text-lg font-bold inline">{player.kills}</p>
-                                                        <p className="text-lg text-slate-50/20 inline"> / </p>
-                                                        <p className="text-lg text-red-500 font-bold inline">{player.deaths}</p>
-                                                        <p className="text-lg text-slate-50/20 inline"> / </p>
-                                                        <p className="text-lg font-bold inline">{player.assists}</p>
-                                                        <p className="text-slate-50/80">{KDA + ":1 KDA"}</p>
-                                                        <p className="text-slate-50/80">{"CS " + CScore + " (" + CSPM + ")"}</p>
-                                                        <p className="text-slate-50/80">{"Vision Score : " + VScore}</p>
+                                                    <div key="stats" className="min-w-fit">
+                                                        <div key="kda" className="min-w-fit">
+                                                            <p className="text-lg font-bold inline">{player.kills}</p>
+                                                            <p className="text-lg text-slate-50/20 inline"> / </p>
+                                                            <p className="text-lg text-red-500 font-bold inline">{player.deaths}</p>
+                                                            <p className="text-lg text-slate-50/20 inline"> / </p>
+                                                            <p className="text-lg font-bold inline">{player.assists}</p>
+                                                            <p className="text-slate-50/80">{KDA + ":1 KDA"}</p>
+                                                            <p className="text-slate-50/80">{"CS " + CScore + " (" + CSPM + ")"}</p>
+                                                            <p className="text-slate-50/80">{"Vision Score : " + VScore}</p>
+                                                        </div>
+                                                        <div key="achievments">
+                                                            {multiKills
+                                                            ?
+                                                                <span key="multiKills" className="bg-red-600 text-red-200">{multiKills}</span>
+                                                            :
+                                                                <></>
+                                                            }
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
