@@ -2,7 +2,9 @@ import './style/index.css';
 import NavBar from './components/NavBar';
 import AccCard from './components/AccountCard';
 import Dashboard from './components/Dashboard';
+import ErrorCard from './components/ErrorCard';
 import { useEffect, useState } from 'react';
+
 
 function App() {
   const [patch, setPatch] = useState("");
@@ -60,7 +62,7 @@ function App() {
             }
           </div>
         </aside>
-        <div className="lg:basis-3/4 basis-full pt-16 overflow-y-auto scrollbar">
+        <div className="flex flex-col justify-between lg:basis-3/4 basis-full pt-16 overflow-y-auto scrollbar h-[100vh]">
           { currentAcc ?
               <Dashboard props={{currentAcc , region , patch}}/>
             :
@@ -68,8 +70,11 @@ function App() {
                 <p className="text-xl text-slate-600 pt-4 text-center">No account selected.</p>
               </div>
           }
-          
+          <div id="footer" className="justify-self-end bottom-10 w-full">
+            <p className="text-center text-lg text-yellow-600 font-medium mb-10"><b><a href="https://www.ayoub-dev.com" target="_blank" className="hover:underline decoration-dotted underline-offset-2">Ayoub NAIT MIHOUB</a></b> Production 2023</p>
+          </div>
         </div>
+        <ErrorCard />
       </main>
     </div>
   );

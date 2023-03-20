@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { getMulti, getFirstBlood, getFarmer, getRegionName2, joinChampions, joinItems, joinRunes, joinSpells, toDateTime } from "../scripts";
+import { getMulti, getFirstBlood, getUnkillable, getFarmer, getRegionName2, joinChampions, joinItems, joinRunes, joinSpells, toDateTime } from "../scripts";
 
 export default function History(props) {
     const [loaded,setLoaded] = useState(false);
@@ -134,6 +134,7 @@ export default function History(props) {
 
                                     const multiKills = getMulti(player);
                                     const firstBlood = getFirstBlood(player);
+                                    const unkillable = getUnkillable(player);
                                     const farmer = getFarmer(player);
 
                                     matchesCards[i] = (
@@ -149,7 +150,7 @@ export default function History(props) {
                                                 </div>
                                             </div>
                                             <div key="playerStats" className="min-w-min grow justify-self-stretch flex flex-row">
-                                                <div className="xl:min-w-[10%] 2xl:min-w-[25%] shrink">
+                                                <div className="xl:min-w-[0%] 2xl:min-w-[25%] shrink">
                                                 </div>
                                                 <div className="flex flex-row px-3">
                                                     <div className="flex flex-col pr-3 mr-3 min-w-fit border-r border-slate-50/20">
@@ -232,6 +233,12 @@ export default function History(props) {
                                                             :
                                                                 <></>
                                                             }
+                                                            {unkillable
+                                                            ?
+                                                                <span key="unkillable" className="bg-gradient-to-r from-yellow-700 via-yellow-600 to-yellow-700 text-slate-50 px-1 mr-1 my-1 rounded max-w-fit">{unkillable}</span>
+                                                            :
+                                                                <></>
+                                                            }
                                                             {farmer
                                                             ?
                                                                 <span key="farmer" className="bg-gradient-to-r from-yellow-700 via-yellow-600 to-yellow-700 text-slate-50 px-1 mr-1 my-1 rounded max-w-fit">{farmer}</span>
@@ -241,7 +248,7 @@ export default function History(props) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="min-w-[10%]">
+                                                <div className="min-w-[10%] xl:min-w-[5%]">
                                                 </div>
                                             </div>
                                             <div key="players" className="flex flex-row justify-self-end align-self-end">

@@ -222,7 +222,11 @@ export function getFirstBlood(player) {
     if(player.firstBloodKill) return "FirstBlood";
     return false;
 }
+export function getUnkillable(player) {
+    if(player.deaths === 0 && !player.teamEarlySurrendered) return "Unkillable";
+    return false;
 
+}
 export function getFarmer(player) {
     const CScore = player.totalMinionsKilled + player.neutralMinionsKilled;
     if((CScore*60 / player.timePlayed) >= 10) return "Farmer";
