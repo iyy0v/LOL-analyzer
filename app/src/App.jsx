@@ -44,10 +44,10 @@ function App() {
 
   return (
     <div className="App h-screen bg-gradient-to-b from-slate-900 to-sky-900  text-gray-100 overflow-hidden">
-      <NavBar addAcc={addAccount} />
+      <NavBar props={{addAccount,loadAccount}} />
       <main className=" h-[100vh] flex divide-x divide-sky-900 z-1">
-        <aside className="basis-1/4 pt-16">
-          <div className="sticky h-[100%] overflow-y-auto overscroll-contain scrollbar pt-4 flex flex-col items-center top-16 divide-y divide-sky-900">
+        <aside className="lg:basis-1/4 pt-16 lg:block hidden basis-0">
+          <div className="sticky h-[100%] overflow-y-auto overscroll-contain scrollbar pt-4 flex flex-col items-center top-16 divide-y divide-sky-900 min-w-[300px]">
             { accounts.length === 0 ? 
               <p className="text-xl text-slate-600 pt-4">No accounts added.</p> 
             : 
@@ -60,7 +60,7 @@ function App() {
             }
           </div>
         </aside>
-        <div className="basis-3/4 pt-16 overflow-y-auto scrollbar">
+        <div className="lg:basis-3/4 basis-full pt-16 overflow-y-auto scrollbar">
           { currentAcc ?
               <Dashboard props={{currentAcc , region , patch}}/>
             :

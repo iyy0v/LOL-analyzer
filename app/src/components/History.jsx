@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { getMulti, getRegionName2, joinChampions, joinItems, joinRunes, joinSpells, toDateTime } from "../scripts";
+import { getMulti, getFirstBlood, getFarmer, getRegionName2, joinChampions, joinItems, joinRunes, joinSpells, toDateTime } from "../scripts";
 
 export default function History(props) {
     const [loaded,setLoaded] = useState(false);
@@ -10,14 +10,14 @@ export default function History(props) {
     const info = props.props.info;
     const region = props.props.region;
     const matches = props.props.matches.data;
+    const matchesCards = [];
 
     function setup() {
         const API_KEY = process.env.REACT_APP_API_KEY;
+        setLoaded(false);
         let regionName = getRegionName2(region);
 
-        console.log(matches);
         setTimeout(() => {
-
         for(let i in matches) {
             setTimeout(() => {
                 axios({
@@ -126,17 +126,19 @@ export default function History(props) {
                                         if(player.win) color = "backdrop-hue-rotate-90 bg-green-600/30";
                                         else color = "backdrop-hue-rotate-180 bg-red-600/30";
                                     }
-                                    console.log(player);
+                                    //console.log(player);
                                     const KDA = ((player.kills + player.assists) / player.deaths).toFixed(1);
                                     const CScore = player.totalMinionsKilled + player.neutralMinionsKilled;
                                     const CSPM = (CScore*60 / player.timePlayed).toFixed(1);
                                     const VScore = player.visionScore;
 
                                     const multiKills = getMulti(player);
+                                    const firstBlood = getFirstBlood(player);
+                                    const farmer = getFarmer(player);
 
-                                    matches[i] = (
-                                        <div key={match.gameId} className={"flex flex-row justify-between rounded-md px-5 py-3 my-2 min-w-fit " + color}>
-                                            <div key="gameInfo" className="flex flex-col justify-between min-w-fit">
+                                    matchesCards[i] = (
+                                        <div key={match.gameId} className={"flex flex-row justify-content-stretch rounded-md px-5 py-3 my-2 min-w-[1000px]" + color}>
+                                            <div key="gameInfo" className="flex flex-col justify-between justify-self-start min-w-[100px]">
                                                 <div className="py-2 border-b border-slate-50/20">
                                                     <p className="font-semibold">{mode}</p>
                                                 </div>
@@ -146,10 +148,12 @@ export default function History(props) {
                                                     <p>{time}</p>
                                                 </div>
                                             </div>
-                                            <div key="playerStats">
-                                                <div className="flex flex-row min-w-fit">
+                                            <div key="playerStats" className="min-w-min grow justify-self-stretch flex flex-row">
+                                                <div className="xl:min-w-[10%] 2xl:min-w-[25%] shrink">
+                                                </div>
+                                                <div className="flex flex-row px-3">
                                                     <div className="flex flex-col pr-3 mr-3 min-w-fit border-r border-slate-50/20">
-                                                        <div key="runes and spells" className="flex flex-row min-w-fit">
+                                                        <div key="runes and spells" className="flex flex-row min-w-fit max-w-[30%]">
                                                             <div key="champ" className="mr-3 min-w-fit">
                                                                 <div className="imgTooltip block">
                                                                     <span className="tooltip">{player.champion.name}</span>
@@ -204,8 +208,8 @@ export default function History(props) {
                                                             { itemsElements }
                                                         </div>
                                                     </div>
-                                                    <div key="stats" className="min-w-fit">
-                                                        <div key="kda" className="min-w-fit">
+                                                    <div key="stats" className="min-w-min max-w-[70%]">
+                                                        <div key="kda" className="min-w-fi max-w-fit">
                                                             <p className="text-lg font-bold inline">{player.kills}</p>
                                                             <p className="text-lg text-slate-50/20 inline"> / </p>
                                                             <p className="text-lg text-red-500 font-bold inline">{player.deaths}</p>
@@ -215,18 +219,32 @@ export default function History(props) {
                                                             <p className="text-slate-50/80">{"CS " + CScore + " (" + CSPM + ")"}</p>
                                                             <p className="text-slate-50/80">{"Vision Score : " + VScore}</p>
                                                         </div>
-                                                        <div key="achievments">
+                                                        <div key="achievments" className="flex flex-wrap justify-start w-full">
                                                             {multiKills
                                                             ?
-                                                                <span key="multiKills" className="bg-red-600 text-red-200">{multiKills}</span>
+                                                                <span key="multiKills" className="bg-gradient-to-r from-yellow-700 via-yellow-600 to-yellow-700 text-slate-50 px-1 mr-1 my-1 rounded max-w-fit">{multiKills}</span>
+                                                            :
+                                                                <></>
+                                                            }
+                                                            {firstBlood
+                                                            ?
+                                                                <span key="firstBlood" className="bg-gradient-to-r from-yellow-700 via-yellow-600 to-yellow-700 text-slate-50 px-1 mr-1 my-1 rounded max-w-fit">{firstBlood}</span>
+                                                            :
+                                                                <></>
+                                                            }
+                                                            {farmer
+                                                            ?
+                                                                <span key="farmer" className="bg-gradient-to-r from-yellow-700 via-yellow-600 to-yellow-700 text-slate-50 px-1 mr-1 my-1 rounded max-w-fit">{farmer}</span>
                                                             :
                                                                 <></>
                                                             }
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div className="min-w-[10%]">
+                                                </div>
                                             </div>
-                                            <div key="players" className="flex flex-row">
+                                            <div key="players" className="flex flex-row justify-self-end align-self-end">
                                                 <div key="team1" className="min-w-[170px]">
                                                     {teams[100]}
                                                 </div>
@@ -236,7 +254,10 @@ export default function History(props) {
                                             </div>
                                         </div>
                                     );
-                                    setCards(matches);
+                                    setCards(matchesCards);
+                                    setTimeout(() => {
+                                        setLoaded(true);
+                                    },1000);
                                 })
                                 .catch((err) => console.log(err));
                             })
@@ -247,15 +268,10 @@ export default function History(props) {
                     .catch((err) => console.log(err));
                 })
                 .catch((err) => console.log(err));
-            },200);
+            },205);
         }
         
-
-        setTimeout(() => {
-            setLoaded(true);
-        },3000);
-        
-        },4000);
+        },2000);
     }
 
     function render() {
@@ -264,8 +280,8 @@ export default function History(props) {
             )
     }
     useEffect(() => {
-        if(!loaded) setup();
-    },[loaded]);
+        setup();
+    },[matches]);
 
     return(
         <div id="history" className="min-w-fit p-4 mt-4 rounded shadow-md backdrop-brightness-90">

@@ -37,7 +37,7 @@ export default function AccCard({accInfo,rankInfo,region,regionName,patch,loadAc
 
     // Component 
     return(
-        <div onClick={loadAccount} className="w-[98%] h-18 p-1 py-3 flex flex-row gap-3 z-1 cursor-pointer hover:ring-2 hover:rounded ">
+        <div onClick={loadAccount} className="w-[98%] h-18 px-2 py-3 flex flex-row gap-3 z-1 rounded cursor-pointer hover:bg-slate-900 ">
             <div className="col-span-1 min-w-16 ">
                 <img src={iconURL} alt="profile icon" className="w-16 rounded-2xl"/>
             </div>

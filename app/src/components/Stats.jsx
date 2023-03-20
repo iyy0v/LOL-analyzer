@@ -7,7 +7,6 @@ ChartJS.register(ArcElement, Tooltip, RadialLinearScale, PointElement, LineEleme
 
 
 export default function Stats(props) {
-    const [old,setOld] = useState(undefined);
     const [normalW, setNormalW] = useState(0);
     const [solo, setSolo] = useState({});
     const [flex, setFlex] = useState({});
@@ -50,81 +49,85 @@ export default function Stats(props) {
         .catch((err) => console.log(err));
     }
 
-    if(info != old) {
-        const API_KEY = process.env.REACT_APP_API_KEY;
-        let regionName = getRegionName2(region);
-        setLoaded(false);
-        setOld(info);
+    function setup() {
         
-        axios({ // get normal games
-            url: "https://" + regionName + ".api.riotgames.com/lol/match/v5/matches/by-puuid/" + info.puuid + "/ids?type=normal&start=0&count=20&api_key=" + API_KEY,
-            method: "GET"
-        })
-        .then((matches) => {
-            let wins = 0;
-            for(let i in matches.data) {
-                setTimeout(() => {
-                    getMatchRes(regionName,matches.data[i],API_KEY)
-                    .then(result =>{
-                        if(result) wins++;
-                        setNormalW(wins);
-                    });
-                },i*200);
-            }
-        })
-        .catch((err) => console.log(err));
-
-        axios({ // get ranked games
-            url: "https://" + region + ".api.riotgames.com/lol/league/v4/entries/by-summoner/" + info.id +"?api_key=" + API_KEY,
-            method: "GET"
-        })
-        .then((res) => {
-            let srW, srL, frW, frL;
-            for(let i in res.data) {
-                if(res.data[i].queueType === 'RANKED_SOLO_5x5') {
-                    srW = res.data[i].wins;
-                    srL = res.data[i].losses;
+        if(matches.status === 200 && matches.statusText === "OK" && matches.data[0] !== undefined) {
+            const API_KEY = process.env.REACT_APP_API_KEY;
+            let regionName = getRegionName2(region);
+            setLoaded(false);
+            
+            axios({ // get normal games
+                url: "https://" + regionName + ".api.riotgames.com/lol/match/v5/matches/by-puuid/" + info.puuid + "/ids?type=normal&start=0&count=20&api_key=" + API_KEY,
+                method: "GET"
+            })
+            .then((matches) => {
+                let wins = 0;
+                for(let i in matches.data) {
+                    setTimeout(() => {
+                        getMatchRes(regionName,matches.data[i],API_KEY)
+                        .then(result =>{
+                            if(result) wins++;
+                            setNormalW(wins);
+                        });
+                    },i*205);
                 }
-                if(res.data[i].queueType === 'RANKED_FLEX_SR') {
-                    frW = res.data[i].wins;
-                    frL = res.data[i].losses;
-                }
-            }
-            if(srW === undefined) {
-                srW = 0;
-                srL = 0;
-            }
-            if(frW === undefined) {
-                frW = 0;
-                frL = 0;
-            }
-            setSolo({srW,srL});
-            setFlex({frW,frL});
-        })
-        .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
 
-        // get lanes
-        const lanes = {};
-        lanes['TOP'] = 0;
-        lanes['JUNGLE'] = 0;
-        lanes['MIDDLE'] = 0;
-        lanes['BOTTOM'] = 0;
-        lanes['UTILITY'] = 0;
-        for(let i in matches.data) {
+            axios({ // get ranked games
+                url: "https://" + region + ".api.riotgames.com/lol/league/v4/entries/by-summoner/" + info.id +"?api_key=" + API_KEY,
+                method: "GET"
+            })
+            .then((res) => {
+                let srW, srL, frW, frL;
+                for(let i in res.data) {
+                    if(res.data[i].queueType === 'RANKED_SOLO_5x5') {
+                        srW = res.data[i].wins;
+                        srL = res.data[i].losses;
+                    }
+                    if(res.data[i].queueType === 'RANKED_FLEX_SR') {
+                        frW = res.data[i].wins;
+                        frL = res.data[i].losses;
+                    }
+                }
+                if(srW === undefined) {
+                    srW = 0;
+                    srL = 0;
+                }
+                if(frW === undefined) {
+                    frW = 0;
+                    frL = 0;
+                }
+                setSolo({srW,srL});
+                setFlex({frW,frL});
+            })
+            .catch((err) => console.log(err));
+
+            // get lanes
+            const lanes = {};
+            lanes['TOP'] = 0;
+            lanes['JUNGLE'] = 0;
+            lanes['MIDDLE'] = 0;
+            lanes['BOTTOM'] = 0;
+            lanes['UTILITY'] = 0;
             setTimeout(() => {
-                getMatchRole(info.name,regionName,matches.data[i],API_KEY)
-                .then((result) => {
-                    lanes[result]++;
-                    setLanes(lanes);
-                });
-            },i*200);
+                for(let i in matches.data) {
+                    setTimeout(() => {
+                        getMatchRole(info.name,regionName,matches.data[i],API_KEY)
+                        .then((result) => {
+                            lanes[result]++;
+                            setLanes(lanes);
+                        });
+                        if(parseInt(i) === (matches.data.length - 1)) setLoaded(true);
+                    },i*205);
+                }
+            },6000);
         }
-        setTimeout(() =>{setLoaded(true)},3000);
     }
     
 
     function display() {
-        if(loaded ) {
+        if(loaded) {
             return (<>
             <div id="ratios" className="flex flex-row justify-around min-h-max">
                 <div id="normalRatio" className='min-h-max min-w-[200px]'>
@@ -173,7 +176,10 @@ export default function Stats(props) {
         }
     }
 
-    useEffect(() =>{},[info,matches,loaded]);
+    useEffect(() =>{
+        if(!loaded) setup();
+        display();
+    },[matches,loaded]);
 
     const normalData = {
         labels: ['Losses','Wins'],

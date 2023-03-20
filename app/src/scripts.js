@@ -207,15 +207,25 @@ export function joinItems(items,player) {
 }
 
 export function getMulti(player) {
-    console.log(player.pentaKills + " " + player.quadraKills + " " + player.tripleKills);
     if(player.pentaKills > 1) return player.pentaKills + "x PentaKill";
     if(player.pentaKills > 0) return "PentaKill";
     if(player.quadraKills > 1) return player.quadraKills + "x QuadraKill";
     if(player.quadraKills > 0) return "QuadraKill";
     if(player.tripleKills > 1) return player.tripleKills + "x TripleKill";
     if(player.tripleKills > 0) return "TripleKill";
+    if(player.doubleKills > 1) return player.doubleKills + "x DoubleKill";
+    if(player.doubleKills > 0) return "DoubleKill";
     return false;
 
+}
+export function getFirstBlood(player) {
+    if(player.firstBloodKill) return "FirstBlood";
+    return false;
+}
+
+export function getFarmer(player) {
+    const CScore = player.totalMinionsKilled + player.neutralMinionsKilled;
+    if((CScore*60 / player.timePlayed) >= 10) return "Farmer";
 }
 
 export function getResult(puuid,match) {

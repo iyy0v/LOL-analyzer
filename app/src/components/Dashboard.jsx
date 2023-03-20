@@ -3,7 +3,6 @@ import axios from "axios";
 import { filterRank,joinChampions,numberWithSpaces,toDateTime,getRegionName,getRegionName2 } from "../scripts";
 import Stats from './Stats';
 import History from "./History";
-import LastBuild from "./LastBuild";
 
 export default function Dashboard(props) { 
     const [rank,setRank] = useState();
@@ -21,6 +20,7 @@ export default function Dashboard(props) {
     
     function render() {
         const API_KEY = process.env.REACT_APP_API_KEY;
+        setLoaded(false);
         axios({
             url: "https://" + region + ".api.riotgames.com/lol/league/v4/entries/by-summoner/" + info.id + "?api_key=" + API_KEY,
             method: "GET"
@@ -38,7 +38,6 @@ export default function Dashboard(props) {
                 .then(res2 => res2.json()).then(champs => {
                     const mastery = joinChampions(res1.data,champs);
                     setMastery(mastery);
-                    console.log(mastery);
                     
                     // Process main champions
                     let n;
@@ -76,14 +75,16 @@ export default function Dashboard(props) {
             })
             .then((result) => {
                 setMatches(result);
+                setTimeout(() => {
+                    setLoaded(true);
+                },1000);
+                
             })
             .catch((err) => console.log(err));
         })
         .catch((err) => {console.log(err)});
         
-        setTimeout(() => {
-            setLoaded(true);
-        },1000);
+        
     }
 
     
@@ -132,11 +133,11 @@ export default function Dashboard(props) {
                     <p className="text-xl text-slate-600 pt-4 text-center">No account selected.</p>
                 </div>
             : //Account selected
-                <div id="dashboard" className="px-[10%] py-16 divide-y divide-slate-600">
-                    <div id="accountInfos" className="flex flex-row justify-between w-full">
+                <div id="dashboard" className="flex flex-col content-center md:mx-[2%] mx-0 py-16 divide-y divide-slate-600 min-w-[920px]">
+                    <div id="accountInfos" className="flex flex-row justify-between w-full min-w-[920px]">
                         <div id="leftInfo"  className="flex flex-row">
                             <div>
-                                <img src={"https://ddragon.leagueoflegends.com/cdn/" + patch + "/img/profileicon/" + info.profileIconId + ".png"} alt="profile icon" className="w-28 rounded-2xl"/>
+                                <img src={"https://ddragon.leagueoflegends.com/cdn/" + patch + "/img/profileicon/" + info.profileIconId + ".png"} alt="profile icon" className="w-28 rounded-2xl mx-3"/>
                                 <p className="w-min px-1 relative top-[-13px] mx-auto rounded bg-slate-900 ">{info.summonerLevel}</p>
                             </div>
                             <div>
@@ -149,13 +150,12 @@ export default function Dashboard(props) {
                             <p className="text-gray-400">Ranked Flex : <strong>{rank !== undefined ? rank.flex !== undefined ? rank.flex.tier + " " + rank.flex.rank + " - " + rank.flex.leaguePoints + " LP" : "Unranked" : "Unranked"}</strong></p>
                         </div>
                     </div>
-                    <div id="accountStats">
-                        <div id="mainChamps" className="flex flex-row my-2 overflow-x-auto scrollbar snap-x snap-normal ">
+                    <div id="accountStats" className="min-w-[920px]">
+                        <div id="mainChamps" className="flex flex-row my-2 overflow-x-auto scrollbar snap-x snap-normal">
                             {mains.length > 0 ? mains : <p className="text-xl text-slate-600 pt-4 text-center">None</p>} 
                         </div>
                         <Stats props={{info, region, matches}}/>
                         <History props={{patch, info, region, matches}}/>
-                        {/*<LastBuild props={{info, region}}/>*/}
                     </div>
                 </div>
             }
