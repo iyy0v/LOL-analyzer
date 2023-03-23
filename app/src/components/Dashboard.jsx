@@ -63,10 +63,6 @@ export default function Dashboard(props) {
                         );
                     }
                     setMains(temp);
-                    showError("Too many requests","Try again later.");
-                    setTimeout(() => {
-                        hideError();
-                    },10000);
                 })
                 .catch(console.log);
             })

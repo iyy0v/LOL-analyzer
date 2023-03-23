@@ -246,9 +246,6 @@ export function findSummoner(summoner,summoners) {
     }
 }
 
-function processError(err) {
-    
-}
 
 export function showError(title,msg) {
     let errTitle = document.getElementById("ErrorTitle");

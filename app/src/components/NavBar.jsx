@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getRegionName } from '../scripts';
+import { getRegionName,showError,hideError } from '../scripts';
 
 
 export default function NavBar(props) {
@@ -27,7 +27,13 @@ export default function NavBar(props) {
                 })
                 .catch((err) => {console.log(err)});
             })
-            .catch((err) => {console.log(err)});
+            .catch((err) => {
+                console.log(err);
+                showError("Summoner not found","Please check the username again.");
+                setTimeout(() => {
+                    hideError();
+                },10000);
+            });
 
             event.target.value = "";
         }
