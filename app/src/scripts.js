@@ -245,3 +245,25 @@ export function findSummoner(summoner,summoners) {
         if(summoners[i].summonerName === summoner) return summoners[i];
     }
 }
+
+function processError(err) {
+    
+}
+
+export function showError(title,msg) {
+    let errTitle = document.getElementById("ErrorTitle");
+    errTitle.innerText = title;
+    let errMsg = document.getElementById("ErrorMsg");
+    errMsg.innerText = msg;
+    let errCard = document.getElementById("ErrorCard");
+    let attr = errCard.getAttribute("class");
+    attr = attr.replace("hidden","");
+    errCard.setAttribute("class",attr);
+}
+
+export function hideError() {
+    let errCard = document.getElementById("ErrorCard");
+    let attr = errCard.getAttribute("class");
+    attr += "hidden";
+    errCard.setAttribute("class",attr);
+}

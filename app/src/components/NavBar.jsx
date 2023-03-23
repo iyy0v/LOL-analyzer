@@ -10,6 +10,7 @@ export default function NavBar(props) {
         const summoner = event.target.value;
         const region = document.getElementById("region").value;
         const regionName = getRegionName(region);
+        
         if(event.key === 'Enter') {
             axios({
               url: "https://" + region + ".api.riotgames.com/lol/summoner/v4/summoners/by-name/" + summoner + "?api_key=" + API_KEY,
@@ -41,7 +42,7 @@ export default function NavBar(props) {
                 <select id="region" className="h-10 p-2 rounded-l outline-none bg-slate-200 text-gray-900 font-bold">
                     {regions}
                 </select>
-                <input type="text" placeholder="Summoner name here" onKeyPress={handleGet} className="w-64 h-10 p-2 rounded-r outline-none text-gray-900 font-medium"/>
+                <input id="searchBar" type="text" placeholder="Summoner name here" onKeyPress={handleGet} className="w-64 h-10 p-2 rounded-r outline-none text-gray-900 font-medium"/>
             </div>
             <div>
                 <a href="https://github.com/iyy0v/LOL-analyzer/" target="_blank" rel="noreferrer">

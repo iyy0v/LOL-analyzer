@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { filterRank,joinChampions,numberWithSpaces,toDateTime,getRegionName,getRegionName2 } from "../scripts";
+import { filterRank,joinChampions,numberWithSpaces,toDateTime,getRegionName,getRegionName2,showError,hideError } from "../scripts";
 import Stats from './Stats';
 import History from "./History";
 
@@ -63,6 +63,10 @@ export default function Dashboard(props) {
                         );
                     }
                     setMains(temp);
+                    showError("Too many requests","Try again later.");
+                    setTimeout(() => {
+                        hideError();
+                    },10000);
                 })
                 .catch(console.log);
             })

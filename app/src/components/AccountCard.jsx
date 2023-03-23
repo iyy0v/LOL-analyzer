@@ -1,4 +1,3 @@
-import { getMatches } from "../scripts";
 
 export default function AccCard({accInfo,rankInfo,region,regionName,patch,loadAcc}) {
     // Init account infos

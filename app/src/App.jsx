@@ -12,6 +12,8 @@ function App() {
   const [rerender, setRerender] = useState(false);
   const [accounts, setAccounts] = useState([]);
   const [region, setRegion] = useState('');
+  const [err,setErr] = useState("Too many requests");
+  const [msg,setMsg] = useState("Please try again in a moment.");
 
   fetch('https://ddragon.leagueoflegends.com/api/versions.json')
   .then(res => res.json()).then(result => setPatch(result[0]))
@@ -70,8 +72,8 @@ function App() {
                 <p className="text-xl text-slate-600 pt-4 text-center">No account selected.</p>
               </div>
           }
-          <div id="footer" className="justify-self-end bottom-10 w-full">
-            <p className="text-center text-lg text-yellow-600 font-medium mb-10"><b><a href="https://www.ayoub-dev.com" target="_blank" className="hover:underline decoration-dotted underline-offset-2">Ayoub NAIT MIHOUB</a></b> Production 2023</p>
+          <div id="footer" className="justify-self-end w-full">
+            <p className="text-center text-lg text-yellow-600 font-medium mb-7 opacity-80"><b><a href="https://www.ayoub-dev.com" target="_blank" className="hover:underline decoration-dotted underline-offset-2">Ayoub NAIT MIHOUB</a></b> Production 2023</p>
           </div>
         </div>
         <ErrorCard />
