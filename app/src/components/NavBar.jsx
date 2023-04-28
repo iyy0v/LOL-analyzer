@@ -32,7 +32,7 @@ export default function NavBar(props) {
                 showError("Summoner not found","Please check the username again.");
                 setTimeout(() => {
                     hideError();
-                },10000);
+                },6000);
             });
 
             event.target.value = "";

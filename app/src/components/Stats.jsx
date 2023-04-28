@@ -63,13 +63,11 @@ export default function Stats(props) {
             .then((matches) => {
                 let wins = 0;
                 for(let i in matches.data) {
-                    setTimeout(() => {
-                        getMatchRes(regionName,matches.data[i],API_KEY)
-                        .then(result =>{
-                            if(result) wins++;
-                            setNormalW(wins);
-                        });
-                    },i*205);
+                    getMatchRes(regionName,matches.data[i],API_KEY)
+                    .then(result =>{
+                        if(result) wins++;
+                        setNormalW(wins);
+                    });
                 }
             })
             .catch((err) => console.log(err));
@@ -110,18 +108,14 @@ export default function Stats(props) {
             lanes['MIDDLE'] = 0;
             lanes['BOTTOM'] = 0;
             lanes['UTILITY'] = 0;
-            setTimeout(() => {
-                for(let i in matches.data) {
-                    setTimeout(() => {
-                        getMatchRole(info.name,regionName,matches.data[i],API_KEY)
-                        .then((result) => {
-                            lanes[result]++;
-                            setLanes(lanes);
-                        });
-                        if(parseInt(i) === (matches.data.length - 1)) setLoaded(true);
-                    },i*205);
-                }
-            },6000);
+            for(let i in matches.data) {
+                getMatchRole(info.name,regionName,matches.data[i],API_KEY)
+                .then((result) => {
+                    lanes[result]++;
+                    setLanes(lanes);
+                });
+                if(parseInt(i) === (matches.data.length - 1)) setLoaded(true);
+            }
         }
     }
     
