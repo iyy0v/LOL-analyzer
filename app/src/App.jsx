@@ -66,7 +66,7 @@ function App() {
         </aside>
         <div className="flex flex-col justify-between lg:basis-3/4 basis-full pt-16 overflow-y-auto scrollbar h-[100vh]">
           { currentAcc ?
-              <Dashboard props={{currentAcc , region , patch}}/>
+              <Dashboard props={{currentAcc , region , patch, addAccount, loadAccount}}/>
             :
               <div id="dashboard" className="pt-4">
                 <p className="text-xl text-slate-600 pt-4 text-center">No account selected.</p>

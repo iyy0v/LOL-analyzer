@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { getMulti, getFirstBlood, getUnkillable, getFarmer, getRegionName2, joinChampions, joinItems, joinRunes, joinSpells, toDateTime } from "../scripts";
+import { getMulti, getFirstBlood, getUnkillable, getFarmer, getRegionName, getRegionName2, joinChampions, joinItems, joinRunes, joinSpells, toDateTime, showError, hideError } from "../scripts";
 
 export default function History(props) {
     const [loaded,setLoaded] = useState(false);
@@ -11,6 +11,39 @@ export default function History(props) {
     const region = props.props.region;
     const matches = props.props.matches.data;
     const matchesCards = [];
+
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
+    function searchSummoner(event) {
+        const summoner = event.target.textContent;
+        const region = document.getElementById("region").value;
+        const regionName = getRegionName(region);
+
+        console.log(event.target.textContent);
+        
+        axios({
+            url: "https://" + region + ".api.riotgames.com/lol/summoner/v4/summoners/by-name/" + summoner + "?api_key=" + API_KEY,
+            method: "GET"
+          })
+          .then((res1) => {
+              axios({
+              url: "https://" + region + ".api.riotgames.com/lol/league/v4/entries/by-summoner/" + res1.data.id + "?api_key=" + API_KEY,
+              method: "GET"
+              })
+              .then((res2) => {
+                  props.props.addAccount(res1,res2,region,regionName);
+                  props.props.loadAccount(res1,region);
+              })
+              .catch((err) => {console.log(err)});
+          })
+          .catch((err) => {
+              console.log(err);
+              showError("Summoner not found","Please check the username again.");
+              setTimeout(() => {
+                  hideError();
+              },6000);
+          });
+    }
 
     function setup() {
         const API_KEY = process.env.REACT_APP_API_KEY;
@@ -56,7 +89,7 @@ export default function History(props) {
                 let player;
                 const teams = {100:[],200:[]};
                     // add players to the card
-                fetch('http://ddragon.leagueoflegends.com/cdn/' + patch + '/data/en_US/champion.json')
+                fetch('https://ddragon.leagueoflegends.com/cdn/' + patch + '/data/en_US/champion.json')
                 .then(res2 => res2.json()).then(champs => {
                     const players = joinChampions(match.participants,champs);
                     for(let j in players) {
@@ -66,7 +99,7 @@ export default function History(props) {
                                 <div key={players[j].summonerId} className="flex flex-row align-middle my-1">
                                     <div className="imgTooltip inline-block min-h-max">
                                         <span className="tooltip">{players[j].champion.name}</span>
-                                        <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + players[j].champion.id + ".png"} alt={players[j].champion.name + "'s image"} className="rounded-md w-[25px] h-[25px]"/>
+                                        <img src={"https://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + players[j].champion.id + ".png"} alt={players[j].champion.name + "'s image"} className="rounded-md w-[25px] h-[25px]"/>
                                     </div>
                                     <p className="text-sm text-gray-300 pt-1 ml-2"><strong>{players[j].summonerName}</strong></p>
                                 </div>
@@ -77,23 +110,23 @@ export default function History(props) {
                                 <div key={players[j].summonerId} className="flex flex-row align-middle my-1">
                                     <div className="imgTooltip inline-block min-h-max">
                                         <span className="tooltip">{players[j].champion.name}</span>
-                                        <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + players[j].champion.id + ".png"} alt={players[j].champion.name + "'s image"} className="rounded-md w-[25px] h-[25px]"/>
+                                        <img src={"https://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + players[j].champion.id + ".png"} alt={players[j].champion.name + "'s image"} className="rounded-md w-[25px] h-[25px]"/>
                                     </div>
-                                    <p className="text-sm text-gray-300/80 pt-1 ml-2">{players[j].summonerName}</p>
+                                    <p className="text-sm text-gray-300/80 pt-1 ml-2 hover:text-gray-300 hover:cursor-pointer" onClick={searchSummoner}>{players[j].summonerName}</p>
                                 </div>
                             );
                         }
                     }
-                    fetch('http://ddragon.leagueoflegends.com/cdn/' + patch + '/data/en_US/summoner.json')
+                    fetch('https://ddragon.leagueoflegends.com/cdn/' + patch + '/data/en_US/summoner.json')
                     .then(res3 => res3.json())
                     .then(spells => { // add spells info to the player
                         player = joinSpells(spells,player);
                         
-                        fetch('http://ddragon.leagueoflegends.com/cdn/' + patch +'/data/en_US/runesReforged.json')
+                        fetch('https://ddragon.leagueoflegends.com/cdn/' + patch +'/data/en_US/runesReforged.json')
                         .then(res4 => res4.json()).then(runes => { // add runes info to player
                             player = joinRunes(runes,player);
                             
-                            fetch('http://ddragon.leagueoflegends.com/cdn/' + patch +'/data/en_US/item.json')
+                            fetch('https://ddragon.leagueoflegends.com/cdn/' + patch +'/data/en_US/item.json')
                             .then(res4 => res4.json()).then(items => { // add items info to player
                                 player = joinItems(items,player);
                                 const itemsElements = player.items.map((item,i) => (
@@ -103,7 +136,7 @@ export default function History(props) {
                                     :
                                     <div key={i} className="imgTooltip block h-min">
                                         <span className="tooltip">{item.name}</span>
-                                        <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/item/" + item.image.full} alt={item.name + " icon"} className="w-[30px] h-[30px] rounded" />
+                                        <img src={"https://ddragon.leagueoflegends.com/cdn/" + patch + "/img/item/" + item.image.full} alt={item.name + " icon"} className="w-[30px] h-[30px] rounded" />
                                     </div>
                                 ));
                                 itemsElements[6] =  player.items[6] === undefined
@@ -112,7 +145,7 @@ export default function History(props) {
                                                     :
                                                     <div key="6" className="imgTooltip block h-min">
                                                         <span className="tooltip">{player.items[6].name}</span>
-                                                        <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/item/" + player.items[6].image.full} alt={player.items[6].name + " icon"} className="w-[30px] h-[30px] ml-2 rounded-full" />
+                                                        <img src={"https://ddragon.leagueoflegends.com/cdn/" + patch + "/img/item/" + player.items[6].image.full} alt={player.items[6].name + " icon"} className="w-[30px] h-[30px] ml-2 rounded-full" />
                                                     </div>;
                                 let color;
                                 if(player.teamEarlySurrendered) color = "backdrop-hue-rotate-90 bg-gray-800/80";
@@ -150,18 +183,18 @@ export default function History(props) {
                                                         <div key="champ" className="mr-3 min-w-fit">
                                                             <div className="imgTooltip block">
                                                                 <span className="tooltip">{player.champion.name}</span>
-                                                                <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + player.champion.id + ".png"} alt={player.champion.name + " image"} className="w-[64px] h-[64px] rounded-md"/>
+                                                                <img src={"https://ddragon.leagueoflegends.com/cdn/" + patch + "/img/champion/" + player.champion.id + ".png"} alt={player.champion.name + " image"} className="w-[64px] h-[64px] rounded-md"/>
                                                             </div>
                                                             <p className="text-sm w-min px-1 relative top-[-20px] right-[-18px] mx-auto rounded bg-slate-900 ">{player.champLevel}</p>
                                                         </div>
                                                         <div key="spells" className="mr-3 min-w-fit">
                                                             <div key={player.spells[0].name} className="imgTooltip block">
                                                                 <span className="tooltip">{player.spells[0].name}</span>
-                                                                <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch +"/img/spell/" + player.spells[0].image.full} alt={player.spells[0].name + " image"} className="w-[30px] h-[30px] rounded-md mb-1 block" />
+                                                                <img src={"https://ddragon.leagueoflegends.com/cdn/" + patch +"/img/spell/" + player.spells[0].image.full} alt={player.spells[0].name + " image"} className="w-[30px] h-[30px] rounded-md mb-1 block" />
                                                             </div>
                                                             <div key={player.spells[1].name} className="imgTooltip block">
                                                                 <span className="tooltip">{player.spells[1].name}</span>
-                                                                <img src={"http://ddragon.leagueoflegends.com/cdn/" + patch +"/img/spell/" + player.spells[1].image.full} alt={player.spells[1].name + " image"} className="w-[30px] h-[30px] rounded-md block" />
+                                                                <img src={"https://ddragon.leagueoflegends.com/cdn/" + patch +"/img/spell/" + player.spells[1].image.full} alt={player.spells[1].name + " image"} className="w-[30px] h-[30px] rounded-md block" />
                                                             </div>
                                                         </div>
                                                         <div key="mainRune" className="min-w-fit">

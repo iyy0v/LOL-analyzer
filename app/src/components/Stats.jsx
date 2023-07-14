@@ -16,6 +16,7 @@ export default function Stats(props) {
     const info = props.props.info;
     const matches = props.props.matches;
 
+
     async function getMatchRes(regionName,matchID,API_KEY) {
         return axios({
             url: "https://" + regionName + ".api.riotgames.com/lol/match/v5/matches/" + matchID +"?api_key=" + API_KEY,
@@ -48,6 +49,7 @@ export default function Stats(props) {
         })
         .catch((err) => console.log(err));
     }
+
 
     function setup() {
         
