@@ -28,7 +28,6 @@ export default function NavBar(props) {
                 .catch((err) => {console.log(err)});
             })
             .catch((err) => {
-                console.log(err);
                 showError("Summoner not found","Please check the username again.");
                 setTimeout(() => {
                     hideError();
@@ -38,10 +37,14 @@ export default function NavBar(props) {
             event.target.value = "";
         }
     };
+
+    function pageRefresh() {
+        window.location.reload();
+    }
     
     return (
         <nav id="navbar" className="fixed flex flex-row flex-nowrap justify-between items-center z-10 w-full h-16 pr-4 pl-4 backdrop-blur-md shadow-sm shadow-slate-800">
-            <div>
+            <div onClick={pageRefresh} style={{cursor: 'pointer'}}>
                 <img src={require("../img/logo.png")} alt="logo" className='w-36' />
             </div>
             <div>

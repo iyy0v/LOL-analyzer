@@ -3,6 +3,7 @@ import axios from "axios";
 import { getMulti, getFirstBlood, getUnkillable, getFarmer, getRegionName, getRegionName2, joinChampions, joinItems, joinRunes, joinSpells, toDateTime, showError, hideError } from "../scripts";
 
 export default function History(props) {
+    const [response,setResponse] = useState(false);
     const [loaded,setLoaded] = useState(false);
     const [cards,setCards] = useState([]);
 
@@ -286,10 +287,11 @@ export default function History(props) {
                                         </div>
                                     </div>
                                 );
-                                setCards(matchesCards);
-                                setTimeout(() => {
-                                    setLoaded(true);
-                                },1000);
+                                if(parseInt(i) === matches.length - 1) {
+                                    console.log(matchesCards);
+                                    setCards(matchesCards);
+                                    setResponse(true);
+                                }
                             })
                             .catch((err) => console.log(err));
                         })
@@ -303,21 +305,20 @@ export default function History(props) {
         }
     }
 
-    function render() {
-            return(
-                cards
-            )
-    }
     useEffect(() => {
         setup();
     },[matches]);
+
+    useEffect(() => {
+        setLoaded(true);
+    },[response, info])
 
     return(
         <div id="history" className="min-w-fit p-4 mt-4 rounded shadow-md backdrop-brightness-90">
             <h2 className="text-2xl text-center mb-3">Matches History</h2>
             {loaded
             ?
-                render()
+                cards
             :
                 "Loading..."
             }

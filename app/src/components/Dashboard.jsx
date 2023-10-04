@@ -9,6 +9,7 @@ export default function Dashboard(props) {
     const [mastery,setMastery] = useState();
     const [mains,setMains] = useState([]);
     const [matches,setMatches] = useState([]);
+    const [response,setResponse] = useState(false);
     const [loaded,setLoaded] = useState(false);
 
     const addAccount = props.props.loadAccount;
@@ -78,16 +79,12 @@ export default function Dashboard(props) {
             })
             .then((result) => {
                 setMatches(result);
-                setTimeout(() => {
-                    setLoaded(true);
-                },1000);
-                
+                setResponse(true);
             })
             .catch((err) => console.log(err));
         })
         .catch((err) => {console.log(err)});
-        
-        
+
     }
 
     
@@ -126,6 +123,10 @@ export default function Dashboard(props) {
     useEffect(() =>{
         if(info !== undefined && (typeof region) === "string") render();
     },[info,region]);
+
+    useEffect(() => {
+        if(response) setLoaded(true);
+    }, [response,info])
     
 
 
