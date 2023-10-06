@@ -120,11 +120,11 @@ export default function Stats(props) {
             }
         }
     }
-    
 
-    useEffect(() =>{
-        if(!loaded) setup();
-    },[matches,loaded]);
+    useEffect(() => {
+        setup();
+    },[info,matches])
+    useEffect(() =>{},[loaded]);
 
     const normalData = {
         labels: ['Losses','Wins'],

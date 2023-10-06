@@ -121,6 +121,8 @@ export default function History(props) {
                     fetch('https://ddragon.leagueoflegends.com/cdn/' + patch + '/data/en_US/summoner.json')
                     .then(res3 => res3.json())
                     .then(spells => { // add spells info to the player
+                        console.log(player);
+                        console.log(spells);
                         player = joinSpells(spells,player);
                         
                         fetch('https://ddragon.leagueoflegends.com/cdn/' + patch +'/data/en_US/runesReforged.json')
@@ -290,7 +292,7 @@ export default function History(props) {
                                 if(parseInt(i) === matches.length - 1) {
                                     console.log(matchesCards);
                                     setCards(matchesCards);
-                                    setResponse(true);
+                                    setLoaded(true);
                                 }
                             })
                             .catch((err) => console.log(err));
@@ -306,12 +308,11 @@ export default function History(props) {
     }
 
     useEffect(() => {
+        setLoaded(false);
         setup();
-    },[matches]);
+    },[matches,info]);
 
-    useEffect(() => {
-        setLoaded(true);
-    },[response, info])
+    useEffect(() => {},[loaded])
 
     return(
         <div id="history" className="min-w-fit p-4 mt-4 rounded shadow-md backdrop-brightness-90">
