@@ -16,7 +16,7 @@ It's **LIVE** ! you can visit and try the app [here](https://lolyzer.ayoub-dev.c
 I could have added more useful features but they would've taken a substantial amount of time so I decided not to do so since I am not planning to commercialize this app and I wanted to work on other projects.
 <br />
 
-<video width="748" height="443" src="assets/preview.mkv"></video>
+<video width="748" height="443" src="assets/preview.mp4"></video>
 
 ## Assets & APIs
 [Riot Games Developer Portal Portal](https://developer.riotgames.com/) for all account and matches data.<br />
