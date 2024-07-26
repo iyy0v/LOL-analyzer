@@ -24,7 +24,7 @@ https://github.com/iyy0v/LOL-analyzer/assets/56415787/3f9a0999-44e7-4f63-b3a0-e4
 <br />
 
 ## Tools & Technologies
-React, Tailwind and ChartsJS.
+React, TailwindCSS and ChartsJS.
 
 <br />
 
