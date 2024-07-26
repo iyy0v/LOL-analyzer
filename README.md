@@ -2,8 +2,6 @@
 
 A serverless web app where users can access and analyze [League of Legends](https://www.leagueoflegends.com/) accounts stats and history.
 
-It's **LIVE** ! you can visit and try the app [here](https://lolyzer.ayoub-dev.com/).
-
 ## Features
 - **Account search** on all available regions and servers.
 - **General information** displayed about the account : name, region, icon, level, rank (Solo/Duo and Flex).
